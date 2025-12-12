@@ -43,7 +43,8 @@ A stunning, single-file HTML music player with a glassmorphism design, powered b
 ## 🤝 Contributing
 
 Feel free to fork this project and submit pull requests. Suggestions for new features are always welcome!
-Made with ❤️ by Bhargav Todimela
+
 
 ---
 *Created with ❤️ for music lovers.*
+*Made with ❤️ by Bhargav Todimela.*

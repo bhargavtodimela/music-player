@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Fast, lag-free music player. Stream songs online without ads.">
+
+    <title>JioSaavn Player</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #00ffcc;
+            --bg-color: #0a0a0a;
+            --surface: #121212;
+            --surface-variant: #1e1e1e;
+            --glass: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-secondary: #a0a0a0;
+
+            --nav-height: 56px;
+            --header-height: 56px;
+            --search-height: 60px;
+            --mini-player-height: 60px;
+            --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-area-top: env(safe-area-inset-top, 0px);
+        }
+
+        body.light-mode {
+            --bg-color: #ffffff;
+            --surface: #f2f2f2;
+            --surface-variant: #e0e0e0;
+            --glass: rgba(0, 0, 0, 0.05);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --text-main: #000000;
+            --text-secondary: #555555;
+            --primary: #00997a;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* --- LAYOUT --- */
+
+        .header-group {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: var(--bg-color);
+            border-bottom: 1px solid var(--glass-border);
+            /* Handle safe area */
+            padding-top: var(--safe-area-top);
+        }
+
+        .header {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), #33ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-area {
+            /* Integrated into global layout */
+            height: var(--search-height);
+            padding: 0 16px 12px 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Adjust scroll container depending on view */
+        .app-container {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            /* Top padding = Header + Search (approx) */
+            padding-top: calc(var(--safe-area-top) + var(--header-height) + var(--search-height));
+            /* Bottom padding = Nav + Miniplayer */
+            padding-bottom: calc(var(--nav-height) + var(--mini-player-height) + var(--safe-area-bottom) + 20px);
+        }
+
+        .app-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Favorites/Queue views don't need search bar space, but we keep it simple or hide it via JS */
+        /* Let's make the container adjust based on view? 
+           Easier: Just keep the top padding. */
+
+        /* SEARCH INPUT */
+        #searchBox {
+            width: 100%;
+            height: 44px;
+            background: var(--surface-variant);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 0 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        #searchBox:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 255, 204, 0.1);
+        }
+
+        /* GRID */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+            gap: 16px;
+            padding: 0 16px;
+        }
+
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 0 16px;
+        }
+
+        /* CARD */
+        .card {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .card:active {
+            transform: scale(0.97);
+        }
+
+        .card-img-wrapper {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 8px;
+            background: var(--surface);
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-artist {
+            font-size: 11px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: calc(var(--nav-height) + var(--safe-area-bottom));
+            background: rgba(10, 10, 10, 0.96);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            border-top: 1px solid var(--glass-border);
+            padding-bottom: var(--safe-area-bottom);
+            z-index: 100;
+        }
+
+        body.light-mode .bottom-nav {
+            background: rgba(255, 255, 255, 0.96);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        /* MINI PLAYER */
+        .mini-player {
+            position: fixed;
+            bottom: calc(var(--nav-height) + var(--safe-area-bottom) + 12px);
+            left: 12px;
+            right: 12px;
+            height: 56px;
+            background: var(--surface);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 6px;
+            z-index: 90;
+            transform: translateY(150%);
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+        }
+
+        .mini-player.active {
+            transform: translateY(0);
+        }
+
+        .mp-thumb {
+            width: 44px;
+            height: 44px;
+            border-radius: 4px;
+            object-fit: cover;
+            background: #333;
+        }
+
+        .mp-info {
+            flex: 1;
+            padding: 0 12px;
+            overflow: hidden;
+        }
+
+        .mp-title {
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mp-artist {
+            font-size: 11px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* FULL PLAYER */
+        .full-player {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-color);
+            /* Fallback */
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            padding-top: calc(var(--safe-area-top) + 20px);
+            padding-bottom: calc(var(--safe-area-bottom) + 20px);
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+            visibility: hidden;
+        }
+
+        body.light-mode .full-player {
+            background: #fff;
+        }
+
+        /* Gradient Background for Full Player */
+        .fp-bg {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(to bottom, var(--surface-variant), var(--bg-color));
+            opacity: 0.9;
+        }
+
+        .full-player.open {
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        .fp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .fp-btn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fp-thumb-box {
+            width: 80%;
+            aspect-ratio: 1;
+            margin: 10px auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fp-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .fp-details {
+            margin-bottom: 20px;
+        }
+
+        .fp-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .fp-artist {
+            font-size: 16px;
+            color: var(--primary);
+        }
+
+        /* RANGE INPUT (SEEKBAR) */
+        .range-wrapper {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #fff;
+            margin-top: -6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            background: rgba(128, 128, 128, 0.3);
+            border-radius: 2px;
+        }
+
+        /* JS will update background-size to show filling */
+
+        .time-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+
+        .controls-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-play-lg {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--text-main);
+            color: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* UTILS */
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--surface-variant);
+            color: var(--text-main);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+            z-index: 3000;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header Group (Fixed) -->
+    <div class="header-group">
+        <div class="header">
+            <h1>JioSaavn</h1>
+            <button class="fp-btn" onclick="toggleTheme()" style="padding: 0;">
+                <svg id="themeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div id="searchContainer" class="search-area">
+            <input type="text" id="searchBox" placeholder="Songs, Artists, Podcasts..." autocomplete="off">
+        </div>
+    </div>
+
+    <!-- Scroll Content -->
+    <div class="app-container">
+
+        <div id="view-search" class="view-section active">
+            <div id="searchResults" class="grid-container">
+                <div style="grid-column: 1/-1; text-align: center; margin-top: 40px; color: var(--text-secondary);">
+                    Start typing to search...
+                </div>
+            </div>
+        </div>
+
+        <div id="view-favorites" class="view-section">
+            <div style="padding: 0 16px 16px;">
+                <h2 style="margin: 0; font-size: 18px;">Your Favorites</h2>
+            </div>
+            <div id="favResults" class="grid-container"></div>
+        </div>
+
+        <div id="view-queue" class="view-section">
+            <div style="padding: 0 16px 16px;">
+                <h2 style="margin: 0; font-size: 18px;">Now Playing Queue</h2>
+            </div>
+            <div id="queueResults" class="list-container">
+                <div style="text-align: center; color: var(--text-secondary);">Queue is empty</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Mini Player -->
+    <div id="miniPlayer" class="mini-player" onclick="openFullPlayer()">
+        <img id="mpThumb" class="mp-thumb" src="" alt="">
+        <div class="mp-info">
+            <div id="mpTitle" class="mp-title">Not Playing</div>
+            <div id="mpArtist" class="mp-artist"></div>
+        </div>
+        <button class="fp-btn" id="mpPlayBtn" onclick="togglePlay(event)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Full Player -->
+    <div id="fullPlayer" class="full-player">
+        <div class="fp-bg"></div>
+
+        <!-- Header -->
+        <div class="fp-header">
+            <button class="fp-btn" onclick="closeFullPlayer()">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+            <span style="font-size: 12px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600;">Now
+                Playing</span>
+            <button class="fp-btn" style="opacity: 0; pointer-events: none;"><svg width="24" height="24"></svg></button>
+        </div>
+
+        <!-- Art -->
+        <div class="fp-thumb-box">
+            <img id="fpThumb" class="fp-thumb" src="" alt="">
+        </div>
+
+        <!-- Meta -->
+        <div class="fp-details">
+            <div id="fpTitle" class="fp-title">Song Title</div>
+            <div id="fpArtist" class="fp-artist">Artist</div>
+        </div>
+
+        <!-- Actions -->
+        <div class="action-row">
+            <button class="fp-btn" onclick="toggleFav(event)" id="fpFavBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                    </path>
+                </svg>
+            </button>
+            <button class="fp-btn" onclick="addToQueue(state.currentSong)" title="Add to Queue">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Seek -->
+        <div class="range-wrapper">
+            <input type="range" id="seekSlider" min="0" max="100" value="0">
+            <div class="time-row">
+                <span id="currTime">0:00</span>
+                <span id="durTime">0:00</span>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-row">
+            <button class="fp-btn" onclick="playPrev()">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 20L9 12l10-8v16zM5 19h2V5H5v14z" />
+                </svg>
+            </button>
+
+            <button id="fpPlayBtn" class="btn-play-lg" onclick="togglePlay(event)">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+            </button>
+
+            <button class="fp-btn" onclick="playNext()">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M5 4l10 8-10 8V4zm14 1v14h-2V5h2z" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="switchView('search')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span>Search</span>
+        </button>
+        <button class="nav-item" onclick="switchView('favorites')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                </path>
+            </svg>
+            <span>Favorites</span>
+        </button>
+        <button class="nav-item" onclick="switchView('queue')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+            <span>Queue</span>
+        </button>
+    </nav>
+
+    <div id="toast"></div>
+    <audio id="audio"></audio>
+
+    <script>
+        const API = "https://jiosaavn-api.bhargavtodimela4.workers.dev/api/search/songs?query=";
+        const FAV_KEY = "js_fav_v4";
+        const THEME_KEY = "js_theme_v2";
+
+        let state = {
+            queue: [],
+            qIdx: -1,
+            isPlaying: false,
+            currentSong: null,
+            isDragging: false
+        };
+
+        const ui = {
+            search: document.getElementById('searchBox'),
+            results: document.getElementById('searchResults'),
+            audio: document.getElementById('audio'),
+            miniPlayer: document.getElementById('miniPlayer'),
+            fullPlayer: document.getElementById('fullPlayer'),
+            favResults: document.getElementById('favResults'),
+            queueResults: document.getElementById('queueResults'),
+            slider: document.getElementById('seekSlider'),
+
+            // Text Elements
+            mpTitle: document.getElementById('mpTitle'),
+            mpArtist: document.getElementById('mpArtist'),
+            mpThumb: document.getElementById('mpThumb'),
+            fpTitle: document.getElementById('fpTitle'),
+            fpArtist: document.getElementById('fpArtist'),
+            fpThumb: document.getElementById('fpThumb'),
+            currTime: document.getElementById('currTime'),
+            durTime: document.getElementById('durTime'),
+
+            // Buttons
+            mpPlay: document.getElementById('mpPlayBtn'),
+            fpPlay: document.getElementById('fpPlayBtn'),
+            fpFav: document.getElementById('fpFavBtn'),
+            themeIcon: document.getElementById('themeIcon')
+        };
+
+        const icons = {
+            play: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>',
+            pause: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>',
+            playLg: '<svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>',
+            pauseLg: '<svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>',
+            heart: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>',
+            heartFill: '<svg width="24" height="24" viewBox="0 0 24 24" fill="#ff4757" stroke="#ff4757" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>'
+        };
+
+        function init() {
+            // Theme
+            const theme = localStorage.getItem(THEME_KEY) || 'dark';
+            if (theme === 'light') document.body.classList.add('light-mode');
+            updateThemeIcon();
+
+            // Search
+            let timer;
+            ui.search.addEventListener('input', (e) => {
+                clearTimeout(timer);
+                if (!e.target.value.trim()) return;
+                timer = setTimeout(() => doSearch(e.target.value.trim()), 500);
+            });
+
+            // Audio
+            ui.audio.addEventListener('timeupdate', updateSeek);
+            ui.audio.addEventListener('ended', playNext);
+            ui.audio.addEventListener('play', () => setPlayState(true));
+            ui.audio.addEventListener('pause', () => setPlayState(false));
+
+            // Slider
+            ui.slider.addEventListener('input', () => { state.isDragging = true; });
+            ui.slider.addEventListener('change', (e) => {
+                state.isDragging = false;
+                const pct = e.target.value;
+                if (ui.audio.duration) {
+                    ui.audio.currentTime = (pct / 100) * ui.audio.duration;
+                }
+            });
+
+            renderFavs();
+        }
+
+        // --- SEARCH ---
+        async function doSearch(q) {
+            ui.results.innerHTML = '<div style="grid-column:1/-1;text-align:center;margin-top:20px;">Searching...</div>';
+            try {
+                const res = await fetch(API + encodeURIComponent(q));
+                const data = await res.json();
+                const songs = (data.data.results || []).map(formatSong).filter(s => s.audio);
+
+                ui.results.innerHTML = '';
+                songs.forEach(s => {
+                    const card = createCard(s);
+                    ui.results.appendChild(card);
+                });
+            } catch (e) { console.error(e); ui.results.innerHTML = 'Error'; }
+        }
+
+        function formatSong(s) {
+            return {
+                id: s.id,
+                title: clean(s.name),
+                artist: clean(s.artists?.primary?.[0]?.name || ""),
+                image: s.image?.[2]?.url || s.image?.[0]?.url,
+                audio: s.downloadUrl?.[s.downloadUrl.length - 1]?.url
+            };
+        }
+        function clean(str) { return str ? str.replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&#039;/g, "'") : ""; }
+
+        function createCard(s) {
+            const el = document.createElement('div');
+            el.className = 'card';
+            el.onclick = () => playNew(s);
+            el.innerHTML = `
+                <div class="card-img-wrapper"><img src="${s.image}" loading="lazy"></div>
+                <div class="card-title">${s.title}</div>
+                <div class="card-artist">${s.artist}</div>
+            `;
+            return el;
+        }
+
+        // --- PLAYBACK ---
+        function playNew(s) {
+            const idx = state.queue.findIndex(x => x.id === s.id);
+            if (idx > -1) state.qIdx = idx;
+            else {
+                state.queue.push(s);
+                state.qIdx = state.queue.length - 1;
+            }
+            loadSong(s);
+            renderQueue();
+        }
+
+        function loadSong(s) {
+            state.currentSong = s;
+            ui.audio.src = s.audio;
+            ui.audio.play();
+
+            ui.miniPlayer.classList.add('active');
+
+            // Update UI
+            [ui.mpTitle, ui.fpTitle].forEach(e => e.innerText = s.title);
+            [ui.mpArtist, ui.fpArtist].forEach(e => e.innerText = s.artist);
+            ui.mpThumb.src = s.image;
+            ui.fpThumb.src = s.image.replace('150x150', '500x500');
+
+            updateFavBtn();
+
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: s.title,
+                    artist: s.artist,
+                    artwork: [{ src: s.image, sizes: '512x512', type: 'image/jpeg' }]
+                });
+                navigator.mediaSession.setActionHandler('play', () => ui.audio.play());
+                navigator.mediaSession.setActionHandler('pause', () => ui.audio.pause());
+                navigator.mediaSession.setActionHandler('nexttrack', playNext);
+                navigator.mediaSession.setActionHandler('previoustrack', playPrev);
+            }
+        }
+
+        function togglePlay(e) {
+            e.stopPropagation();
+            if (ui.audio.paused) ui.audio.play(); else ui.audio.pause();
+        }
+
+        function setPlayState(playing) {
+            state.isPlaying = playing;
+            ui.mpPlay.innerHTML = playing ? icons.pause : icons.play;
+            ui.fpPlay.innerHTML = playing ? icons.pauseLg : icons.playLg;
+        }
+
+        function updateSeek() {
+            if (state.isDragging || !ui.audio.duration) return;
+            const pct = (ui.audio.currentTime / ui.audio.duration) * 100;
+            ui.slider.value = pct;
+            ui.currTime.innerText = fmt(ui.audio.currentTime);
+            ui.durTime.innerText = fmt(ui.audio.duration);
+
+            // Fill gradient effect for range
+            const val = (ui.slider.value - ui.slider.min) / (ui.slider.max - ui.slider.min) * 100;
+            ui.slider.style.background = `linear-gradient(to right, ${document.body.classList.contains('light-mode') ? '#00997a' : '#fff'} ${val}%, rgba(128,128,128,0.3) ${val}%)`;
+        }
+
+        function fmt(s) {
+            const m = Math.floor(s / 60);
+            const sc = Math.floor(s % 60);
+            return `${m}:${sc < 10 ? '0' : ''}${sc}`;
+        }
+
+        function playNext() {
+            if (state.qIdx < state.queue.length - 1) {
+                state.qIdx++; loadSong(state.queue[state.qIdx]);
+            }
+        }
+        function playPrev() {
+            if (state.qIdx > 0) {
+                state.qIdx--; loadSong(state.queue[state.qIdx]);
+            }
+        }
+
+        // --- FULL PLAYER ACTIONS ---
+        window.openFullPlayer = () => ui.fullPlayer.classList.add('open');
+        window.closeFullPlayer = () => ui.fullPlayer.classList.remove('open');
+
+        window.toggleFav = (e) => {
+            if (e) e.stopPropagation();
+            if (!state.currentSong) return;
+
+            let favs = JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
+            const idx = favs.findIndex(f => f.id === state.currentSong.id);
+
+            if (idx > -1) {
+                favs.splice(idx, 1);
+                showToast('Removed from Favorites');
+            } else {
+                favs.push(state.currentSong);
+                showToast('Added to Favorites');
+            }
+            localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+            renderFavs();
+            updateFavBtn();
+        };
+
+        function updateFavBtn() {
+            if (!state.currentSong) return;
+            const favs = JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
+            const isFav = favs.find(f => f.id === state.currentSong.id);
+            ui.fpFav.innerHTML = isFav ? icons.heartFill : icons.heart;
+        }
+
+        window.addToQueue = (s) => {
+            if (!s) return;
+            // Add duplicate? sure
+            state.queue.push(s);
+            showToast('Added to Queue');
+            renderQueue();
+        };
+
+        // --- THEME ---
+        window.toggleTheme = () => {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
+            updateThemeIcon();
+            updateSeek(); // Update color
+        };
+
+        function updateThemeIcon() {
+            const isLight = document.body.classList.contains('light-mode');
+            ui.themeIcon.innerHTML = isLight
+                ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>'
+                : '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+        }
+
+        // --- VIEWS ---
+        window.switchView = (v) => {
+            document.querySelectorAll('.view-section').forEach(e => e.classList.remove('active'));
+            document.getElementById('view-' + v).classList.add('active');
+
+            document.querySelectorAll('.nav-item').forEach((e, i) => {
+                const map = ['search', 'favorites', 'queue'];
+                if (map[i] === v) e.classList.add('active');
+                else e.classList.remove('active');
+            });
+
+            // Show/Hide search bar?
+            const searchContainer = document.getElementById('searchContainer');
+            if (v === 'search') searchContainer.style.display = 'flex';
+            else searchContainer.style.display = 'none';
+        };
+
+        // --- RENDER ---
+        function renderFavs() {
+            const favs = JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
+            ui.favResults.innerHTML = '';
+            favs.reverse().forEach(s => {
+                const el = createCard(s);
+                ui.favResults.appendChild(el);
+            });
+        }
+
+        function renderQueue() {
+            ui.queueResults.innerHTML = '';
+            state.queue.forEach((s, i) => {
+                const el = document.createElement('div');
+                el.style.cssText = `display:flex;align-items:center;gap:12px;padding:10px;background:var(--surface);border-radius:8px;margin-bottom:8px;border:1px solid ${i === state.qIdx ? 'var(--primary)' : 'transparent'}`;
+                el.onclick = () => { state.qIdx = i; loadSong(s); };
+                el.innerHTML = `
+                    <div style="font-size:14px;color:var(--text-secondary);width:20px;">${i + 1}</div>
+                    <img src="${s.image}" style="width:40px;height:40px;border-radius:4px;">
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-size:14px;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.title}</div>
+                        <div style="font-size:12px;color:var(--text-secondary);">${s.artist}</div>
+                    </div>
+                `;
+                ui.queueResults.appendChild(el);
+            });
+        }
+
+        function showToast(m) {
+            const t = document.getElementById('toast');
+            t.innerText = m; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

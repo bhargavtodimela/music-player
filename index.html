@@ -5,10 +5,13 @@
     <meta name="google-site-verification" content="dO40MJsX5bbJwAuRYl8ewUiN7YD_LD7attdIkx2JzKQ" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Bhargav Music Player — Online Music, JioSaavn SEO, Telugu Songs</title>
+    <title>Bhargav Music Player — Online Music, JioSaavn SEO, Telugu Songs</title>
+    <link rel="dns-prefetch" href="https://jiosaavn-api.bhargavtodimela4.workers.dev">
+    <link rel="preconnect" href="https://jiosaavn-api.bhargavtodimela4.workers.dev" crossorigin>
 
     <!-- SEO Description -->
-    <meta name="description" content="Enjoy all songs for free — stream online with no ads and 100% uptime. Made by Bhargav Todimela. Telugu songs, JioSaavn search, fast music player." />
+    <meta name="description"
+        content="Enjoy all songs for free — stream online with no ads and 100% uptime. Made by Bhargav Todimela. Telugu songs, JioSaavn search, fast music player." />
 
     <!-- SEO Keywords -->
     <meta name="keywords" content="
@@ -23,7 +26,8 @@
 
     <!-- Open Graph (Facebook / LinkedIn) -->
     <meta property="og:title" content="Bhargav Music Player — Stream All Songs Free" />
-    <meta property="og:description" content="Enjoy all songs online — no ads, 100% uptime. Built by Bhargav Todimela." />
+    <meta property="og:description"
+        content="Enjoy all songs online — no ads, 100% uptime. Built by Bhargav Todimela." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://your-vercel-url.vercel.app" />
     <meta property="og:image" content="https://your-thumbnail-image-url.jpg" />
@@ -202,6 +206,12 @@
             padding-bottom: 20px;
         }
 
+        .grid-container.loading {
+            opacity: 0.6;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+
         .list-container {
             width: 90%;
             max-width: 800px;
@@ -271,6 +281,9 @@
             position: relative;
             overflow: hidden;
             contain: content;
+            content-visibility: auto;
+            contain-intrinsic-size: 0 250px;
+            /* Reduces layout shift */
         }
 
         .card:hover {
@@ -593,6 +606,16 @@
 </head>
 
 <body>
+    <script>
+        (function () {
+            try {
+                const storedTheme = localStorage.getItem("jiosaavn_theme");
+                if (storedTheme === 'light') {
+                    document.body.classList.add('light-mode');
+                }
+            } catch (e) { }
+        })();
+    </script>
 
     <div id="toast-container"></div>
 
@@ -713,7 +736,7 @@
                 searchResults.innerHTML = '<div class="status-msg">🚀 Type to start searching...</div>';
                 return;
             }
-            searchDebounceTimer = setTimeout(() => performSearch(query), 500);
+            searchDebounceTimer = setTimeout(() => performSearch(query), 300);
         });
 
         searchBox.addEventListener("keydown", (e) => {
@@ -762,10 +785,13 @@
         }
 
         async function performSearch(query) {
-            searchResults.innerHTML = '<div class="status-msg">Searching...</div>';
+            searchResults.classList.add('loading');
+
             try {
                 const res = await fetch(API_BASE + encodeURIComponent(query));
                 const data = await res.json();
+
+                searchResults.classList.remove('loading');
 
                 if (!data.success || !data.data.results || data.data.results.length === 0) {
                     searchResults.innerHTML = '<div class="status-msg">No results found 😔</div>';

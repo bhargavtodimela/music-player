@@ -736,7 +736,7 @@
                 searchResults.innerHTML = '<div class="status-msg">🚀 Type to start searching...</div>';
                 return;
             }
-            searchDebounceTimer = setTimeout(() => performSearch(query), 300);
+            searchDebounceTimer = setTimeout(() => performSearch(query), 1);
         });
 
         searchBox.addEventListener("keydown", (e) => {

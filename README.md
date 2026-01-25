@@ -1,4 +1,4 @@
-# 🎵 JioSaavn Glass Player-BUILT USING GEMINI AND ANTIGRAVITY BY GOOOGLE
+# 🎵 JioSaavn Glass Player-BUILT USING GEMINI AND ANTIGRAVITY BY GOOGLE
 Live at https://music-player-bhargav.vercel.app/
 
 A stunning, single-file HTML music player with a glassmorphism design, powered by the JioSaavn API BUILT USING GOOGLE ANTIGRAVITY AND GEMINI AI.

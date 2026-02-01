@@ -1,70 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta name="google-site-verification" content="dO40MJsX5bbJwAuRYl8ewUiN7YD_LD7attdIkx2JzKQ" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bhargav Music Player — Online Music, JioSaavn SEO, Telugu Songs</title>
-    <link rel="dns-prefetch" href="https://jiosaavn-api.bhargavtodimela4.workers.dev">
-    <link rel="preconnect" href="https://jiosaavn-api.bhargavtodimela4.workers.dev" crossorigin>
-
-    <!-- SEO Description -->
-    <meta name="description"
-        content="Enjoy all songs for free — stream online with no ads and 100% uptime. Made by Bhargav Todimela. Telugu songs, JioSaavn search, fast music player." />
-
-    <!-- SEO Keywords -->
-    <meta name="keywords" content="
-        jio saavn, saavn, music player, music online, music player online,
-        bhargav music player, bhargav vercel, vercel, vercel music player,
-        music player vercel, jio vercel, music vercel, telugu songs, music,
-        kl university projects, github music, github bhargav, bhargav kl,
-        kl university music player, bhargav kl university music player,
-        bhargav github, bhargav kl university github, kl sac, kl erp,
-        kl lms, kl university, project by klu students, kl academics,kl university fees
-    " />
-
-    <!-- Open Graph (Facebook / LinkedIn) -->
-    <meta property="og:title" content="Bhargav Music Player — Stream All Songs Free" />
-    <meta property="og:description"
-        content="Enjoy all songs online — no ads, 100% uptime. Built by Bhargav Todimela." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://your-vercel-url.vercel.app" />
-    <meta property="og:image" content="https://your-thumbnail-image-url.jpg" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Bhargav Music Player — Online Songs (No Ads)" />
-    <meta name="twitter:description" content="Stream any song free with 100% uptime. Created by Bhargav Todimela." />
-    <meta name="twitter:image" content="https://your-thumbnail-image-url.jpg" />
+    <title>JioSaavn Player — Material Design</title>
+    
+    <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Google+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
     <style>
         :root {
-            --primary: #00ffcc;
-            --bg-color: #0a0a0a;
-            --card-bg: rgba(30, 30, 30, 0.4);
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #ffffff;
-            --text-muted: #b3b3b3;
-            --heart: #ff4d4d;
-            --player-bg: rgba(20, 20, 20, 0.9);
-            --toast-bg: #333;
+            /* Material 3 Dark Palette (Default) */
+            --md-sys-color-primary: #D0BCFF;
+            --md-sys-color-on-primary: #381E72;
+            --md-sys-color-primary-container: #4F378B;
+            --md-sys-color-on-primary-container: #EADDFF;
+            --md-sys-color-secondary-container: #333333;
+            --md-sys-color-surface: #1C1B1F;
+            --md-sys-color-on-surface: #E6E1E5;
+            --md-sys-color-surface-variant: #49454F;
+            --md-sys-color-on-surface-variant: #CAC4D0;
+            --md-sys-color-outline: #938F99;
+            --md-sys-color-surface-container: #211F26;
+            --ripple-color: rgba(255, 255, 255, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.light-mode {
-            --primary: #008f8f;
-            --bg-color: #f0f2f5;
-            --card-bg: rgba(255, 255, 255, 0.8);
-            --glass: rgba(0, 0, 0, 0.05);
-            --glass-border: rgba(0, 0, 0, 0.1);
-            --text-main: #1a1a1a;
-            --text-muted: #666666;
-            --heart: #e60023;
-            --player-bg: rgba(255, 255, 255, 0.9);
-            --toast-bg: #fff;
+            --md-sys-color-primary: #6750A4;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #EADDFF;
+            --md-sys-color-on-primary-container: #21005D;
+            --md-sys-color-secondary-container: #E8DEF8;
+            --md-sys-color-surface: #FEF7FF;
+            --md-sys-color-on-surface: #1D1B20;
+            --md-sys-color-surface-variant: #E7E0EB;
+            --md-sys-color-on-surface-variant: #49454F;
+            --md-sys-color-outline: #79747E;
+            --md-sys-color-surface-container: #F3EDF7;
+            --ripple-color: rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -73,1005 +50,580 @@
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--bg-color);
-            color: var(--text-main);
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding-bottom: 160px;
-            transition: background 0.3s, color 0.3s;
+            padding-bottom: 120px;
+            transition: background 0.3s;
         }
 
+        /* Ripple Effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple-element {
+            position: absolute;
+            background: var(--ripple-color);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple-animation {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* App Bar */
         .header-container {
+            width: 100%;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 90%;
-            max-width: 600px;
-            margin: 20px 0;
-        }
-
-        .theme-btn {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-            padding: 10px;
-            border-radius: 50%;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-        }
-
-        .theme-btn:hover {
-            background: rgba(128, 128, 128, 0.2);
+            max-width: 1200px;
         }
 
         h1 {
-            text-align: center;
-            font-weight: 600;
-            background: linear-gradient(135deg, #00ffcc, #00b4d8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-family: 'Google Sans', sans-serif;
+            font-size: 24px;
+            font-weight: 400;
             margin: 0;
-            font-size: 1.8rem;
-            letter-spacing: -1px;
         }
 
+        .icon-btn {
+            background: transparent;
+            border: none;
+            color: var(--md-sys-color-on-surface);
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .icon-btn:hover { background: var(--md-sys-color-surface-variant); }
+
+        /* Search Bar */
+        .search-wrapper {
+            width: 90%;
+            max-width: 720px;
+            margin: 10px 0 24px 0;
+            position: relative;
+        }
+
+        #searchBox {
+            width: 100%;
+            height: 56px;
+            border-radius: 28px;
+            border: none;
+            background: var(--md-sys-color-surface-container);
+            padding: 0 24px 0 56px;
+            font-size: 16px;
+            color: var(--md-sys-color-on-surface);
+            outline: none;
+            transition: var(--transition);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        #searchBox:focus {
+            background: var(--md-sys-color-surface-variant);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 16px;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        /* Segmented Tabs */
         .nav-tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            background: var(--glass);
-            padding: 5px;
-            border-radius: 50px;
-            border: 1px solid var(--glass-border);
+            background: var(--md-sys-color-surface-container);
+            border-radius: 20px;
+            padding: 4px;
+            margin-bottom: 24px;
+            gap: 4px;
         }
 
         .tab-btn {
             background: transparent;
             border: none;
-            color: var(--text-muted);
-            padding: 8px 20px;
-            font-size: 15px;
-            font-family: inherit;
+            color: var(--md-sys-color-on-surface-variant);
+            padding: 10px 24px;
+            font-weight: 500;
             cursor: pointer;
-            border-radius: 25px;
-            transition: 0.3s;
+            border-radius: 16px;
+            transition: var(--transition);
+            font-family: 'Google Sans', sans-serif;
         }
 
         .tab-btn.active {
-            background: var(--primary);
-            color: #fff;
-            font-weight: 600;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
         }
 
-        .search-container {
-            width: 90%;
-            max-width: 600px;
-            position: relative;
-            margin-bottom: 30px;
-        }
-
-        #searchBox {
-            width: 100%;
-            padding: 18px 25px;
-            border-radius: 50px;
-            border: 1px solid var(--glass-border);
-            background: var(--glass);
-            color: var(--text-main);
-            font-size: 16px;
-            font-family: inherit;
-            outline: none;
-            backdrop-filter: blur(10px);
-            transition: 0.3s ease;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-        }
-
-        #searchBox:focus {
-            background: var(--glass);
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.15);
-        }
-
-        .view-section {
-            display: none;
-            width: 100%;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .view-section:not(.hidden) {
-            display: flex;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
+        /* Grid & Cards */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
             width: 90%;
             max-width: 1200px;
-            padding-bottom: 20px;
-        }
-
-        .grid-container.loading {
-            opacity: 0.6;
-            transition: opacity 0.2s;
-            pointer-events: none;
-        }
-
-        .list-container {
-            width: 90%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .queue-item {
-            display: flex;
-            align-items: center;
-            background: var(--card-bg);
-            padding: 10px;
-            border-radius: 12px;
-            gap: 15px;
-            border: 1px solid var(--glass-border);
-            transition: 0.3s;
-        }
-
-        .queue-item.active {
-            border-color: var(--primary);
-            background: rgba(0, 255, 204, 0.05);
-        }
-
-        .queue-item img {
-            width: 50px;
-            height: 50px;
-            border-radius: 6px;
-            object-fit: cover;
-        }
-
-        .queue-info {
-            flex: 1;
-        }
-
-        .queue-actions {
-            display: flex;
-            gap: 5px;
-        }
-
-        .queue-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .queue-btn:hover {
-            color: var(--primary);
-            background: var(--glass);
-            border-radius: 4px;
         }
 
         .card {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            padding: 15px;
-            border-radius: 16px;
+            background: var(--md-sys-color-surface-container);
+            border: 1px solid var(--md-sys-color-outline);
+            border-radius: 24px;
+            padding: 12px;
             cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-            display: flex;
-            flex-direction: column;
+            transition: var(--transition);
             position: relative;
-            overflow: hidden;
-            contain: content;
-            content-visibility: auto;
-            contain-intrinsic-size: 0 250px;
-            /* Reduces layout shift */
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            background: var(--md-sys-color-surface-variant);
+            transform: translateY(-4px);
         }
 
         .card img {
             width: 100%;
             aspect-ratio: 1;
-            border-radius: 12px;
+            border-radius: 16px;
             object-fit: cover;
             margin-bottom: 12px;
-            background: #222;
-        }
-
-        .card-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
         }
 
         .card-title {
-            font-weight: 600;
+            font-weight: 500;
             font-size: 15px;
-            color: var(--text-main);
+            white-space: nowrap;
             overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
         }
 
         .card-artist {
             font-size: 13px;
-            color: var(--text-muted);
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
+            color: var(--md-sys-color-on-surface-variant);
         }
 
         .card-actions {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 16px;
+            right: 16px;
             display: flex;
+            flex-direction: column;
             gap: 8px;
-            z-index: 2;
+            opacity: 0;
+            transition: 0.2s;
         }
 
-        .action-btn {
-            background: rgba(0, 0, 0, 0.5);
+        .card:hover .card-actions { opacity: 1; }
+
+        .mini-fab {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
             border: none;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: 0.2s;
-            backdrop-filter: blur(4px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        .action-btn svg {
-            width: 16px;
-            height: 16px;
-            fill: none;
-            stroke: white;
-            stroke-width: 2;
-        }
-
-        .action-btn.fav.active svg {
-            fill: var(--heart);
-            stroke: var(--heart);
-        }
-
-        .action-btn:hover {
-            transform: scale(1.1);
-            background: rgba(0, 0, 0, 0.7);
-        }
-
-        .status-msg {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            margin-top: 50px;
-            width: 100%;
-        }
-
+        /* Floating Player */
         #playerBox {
             position: fixed;
-            bottom: 20px;
-            width: 90%;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(150%);
+            width: 94%;
             max-width: 800px;
-            background: var(--player-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 15px 25px;
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            background: var(--md-sys-color-surface-container);
+            padding: 16px;
+            border-radius: 28px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             z-index: 1000;
-            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-            transform: translateY(200%);
-            will-change: transform;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        #playerBox.active {
-            transform: translateY(0);
-        }
+        #playerBox.active { transform: translateX(-50%) translateY(0); }
 
-        .player-main {
+        .player-content {
             display: flex;
             align-items: center;
-            gap: 15px;
-            justify-content: space-between;
-        }
-
-        .player-info-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex: 1;
-            min-width: 0;
+            gap: 16px;
         }
 
         .player-thumb {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
             object-fit: cover;
-            animation: spin 10s linear infinite;
-            animation-play-state: paused;
         }
 
-        .player-thumb.playing {
-            animation-play-state: running;
-        }
+        .player-info { flex: 1; min-width: 0; }
 
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
+        .player-info h4 { margin: 0; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .player-info p { margin: 0; font-size: 13px; color: var(--md-sys-color-primary); }
 
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .player-text {
-            flex: 1;
-            min-width: 0;
-        }
-
-        #currentTitle {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-main);
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-        }
-
-        #currentArtist {
-            font-size: 13px;
-            color: var(--primary);
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-        }
-
-        .player-controls-extra {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .control-btn {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
+        .player-controls {
             display: flex;
             align-items: center;
-            color: var(--text-main);
-            transition: 0.2s;
+            gap: 8px;
         }
 
-        .control-btn:hover {
-            color: var(--primary);
-            transform: scale(1.1);
-        }
-
-        .control-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-        }
-
-        .control-btn.fav svg {
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-        }
-
-        .control-btn.fav.active svg {
-            fill: var(--heart);
-            stroke: var(--heart);
-        }
-
+        /* Material Native Audio Styling */
         audio {
             width: 100%;
-            height: 36px;
-            border-radius: 5px;
-            outline: none;
+            height: 40px;
+            filter: grayscale(1) invert(0);
+        }
+        body:not(.light-mode) audio { filter: invert(1) hue-rotate(180deg); }
+
+        /* Status Messages */
+        .status-msg {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: var(--md-sys-color-on-surface-variant);
         }
 
-        body:not(.light-mode) audio {
-            filter: invert(1) hue-rotate(180deg) opacity(0.85);
-        }
-
+        /* Toasts */
         #toast-container {
             position: fixed;
-            top: 20px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            pointer-events: none;
         }
 
         .toast {
-            background: var(--toast-bg);
-            color: var(--text-main);
-            padding: 12px 20px;
-            border-radius: 8px;
+            background: var(--md-sys-color-on-surface);
+            color: var(--md-sys-color-surface);
+            padding: 12px 24px;
+            border-radius: 12px;
+            margin-bottom: 8px;
             font-size: 14px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: fadeIn 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            min-width: 250px;
-            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: slideUp 0.3s ease;
         }
 
-        .toast::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 3px;
-            background: var(--primary);
-            animation: progress 4s linear forwards;
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes progress {
-            from {
-                width: 100%;
-            }
-
-            to {
-                width: 0%;
-            }
-        }
+        .view-section.hidden { display: none; }
 
         @media (max-width: 600px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .grid-container {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            #playerBox {
-                width: 96%;
-                bottom: 10px;
-                padding: 12px 15px;
-            }
-
-            .card {
-                padding: 10px;
-            }
-
-            .nav-tabs {
-                width: 90%;
-                justify-content: center;
-            }
-
-            .header-container {
-                width: 95%;
-            }
+            .grid-container { grid-template-columns: repeat(2, 1fr); }
+            h1 { font-size: 20px; }
+            .player-controls .icon-btn:not(.play-btn) { display: none; }
         }
     </style>
 </head>
-
 <body>
-    <script>
-        (function () {
-            try {
-                const storedTheme = localStorage.getItem("jiosaavn_theme");
-                if (storedTheme === 'light') {
-                    document.body.classList.add('light-mode');
-                }
-            } catch (e) { }
-        })();
-    </script>
 
     <div id="toast-container"></div>
 
     <div class="header-container">
-        <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle Theme">
-            <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-            </svg>
+        <button class="icon-btn ripple" onclick="toggleTheme()" title="Toggle Theme">
+            <span class="material-symbols-rounded" id="themeIcon">dark_mode</span>
         </button>
+        <h1>JioSaavn Material</h1>
+        <button class="icon-btn ripple" onclick="switchTab('queue')">
+            <span class="material-symbols-rounded">queue_music</span>
+        </button>
+    </div>
 
-        <h1>JioSaavn Player</h1>
-
-        <div style="width: 40px;"></div>
+    <div class="search-wrapper">
+        <span class="material-symbols-rounded search-icon">search</span>
+        <input id="searchBox" type="text" placeholder="Search for songs, artists..." autocomplete="off" />
     </div>
 
     <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('search')">Search</button>
-        <button class="tab-btn" onclick="switchTab('favorites')">Favorites</button>
-        <button class="tab-btn" onclick="switchTab('queue')">Queue</button>
+        <button class="tab-btn active ripple" onclick="switchTab('search')">Search</button>
+        <button class="tab-btn ripple" onclick="switchTab('favorites')">Favorites</button>
+        <button class="tab-btn ripple" onclick="switchTab('queue')">Queue</button>
     </div>
 
+    <!-- Search Section -->
     <div id="searchView" class="view-section">
-        <div class="search-container">
-            <input id="searchBox" type="text" placeholder="Search song, artist..." />
-        </div>
         <div id="searchResults" class="grid-container">
-            <div class="status-msg">🚀 Type to start searching...</div>
+            <div class="status-msg">Search for music to get started</div>
         </div>
     </div>
 
+    <!-- Favorites Section -->
     <div id="favoritesView" class="view-section hidden">
         <div id="favResults" class="grid-container"></div>
     </div>
 
+    <!-- Queue Section -->
     <div id="queueView" class="view-section hidden">
-        <div class="header-container" style="justify-content: center; margin: 0 0 15px 0;">
-            <span style="color: var(--text-muted); font-size: 14px;">Next Up</span>
-        </div>
-        <div id="queueResults" class="list-container">
-            <div class="status-msg">Queue is empty 🎵</div>
-        </div>
+        <div id="queueResults" class="grid-container"></div>
     </div>
 
+    <!-- Player Box -->
     <div id="playerBox">
-        <div class="player-main">
-            <div class="player-info-container">
-                <img id="playerThumb" class="player-thumb" src="https://placehold.co/50" alt="Cover">
-                <div class="player-text">
-                    <div id="currentTitle">Not Playing</div>
-                    <div id="currentArtist">-</div>
-                </div>
+        <div class="player-content">
+            <img id="playerThumb" class="player-thumb" src="https://placehold.co/100" alt="Album Art">
+            <div class="player-info">
+                <h4 id="currentTitle">Not Playing</h4>
+                <p id="currentArtist">-</p>
             </div>
-
-            <div class="player-controls-extra">
-                <button class="control-btn" onclick="playPrev()">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M19 20L9 12l10-8v16zM5 19h2V5H5v14z"></path>
-                    </svg>
+            <div class="player-controls">
+                <button class="icon-btn ripple" onclick="playPrev()">
+                    <span class="material-symbols-rounded">skip_previous</span>
                 </button>
-
-                <button class="control-btn" onclick="playNext()">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M5 4l10 8-10 8V4zm14 1v14h-2V5h2z"></path>
-                    </svg>
+                <button class="icon-btn ripple" onclick="playNext()">
+                    <span class="material-symbols-rounded">skip_next</span>
                 </button>
-
-                <button id="playerFavBtn" class="control-btn fav" onclick="togglePlayerFavorite()">
-                    <svg viewBox="0 0 24 24">
-                        <path
-                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                        </path>
-                    </svg>
+                <button id="playerFavBtn" class="icon-btn ripple" onclick="togglePlayerFavorite()">
+                    <span class="material-symbols-rounded">favorite</span>
                 </button>
             </div>
         </div>
-
         <audio id="audioPlayer" controls controlsList="nodownload"></audio>
     </div>
 
     <script>
         const API_BASE = "https://jiosaavn-api.bhargavtodimela4.workers.dev/api/search/songs?query=";
-        const STORAGE_FAVS = "jiosaavn_favorites_v1";
-        const STORAGE_THEME = "jiosaavn_theme";
+        const STORAGE_FAVS = "jiosaavn_favorites_v2";
+        const STORAGE_THEME = "jiosaavn_theme_v2";
 
         let currentSongData = null;
-        let searchDebounceTimer;
         let queue = [];
         let queueIndex = -1;
-        const preloadCache = new Set();
+        let searchTimer;
 
+        // Elements
         const searchBox = document.getElementById("searchBox");
         const searchResults = document.getElementById("searchResults");
         const favResults = document.getElementById("favResults");
         const queueResults = document.getElementById("queueResults");
-        const playerBox = document.getElementById("playerBox");
         const audioPlayer = document.getElementById("audioPlayer");
-        const playerTitle = document.getElementById("currentTitle");
-        const playerArtist = document.getElementById("currentArtist");
-        const playerThumb = document.getElementById("playerThumb");
-        const playerFavBtn = document.getElementById("playerFavBtn");
+        const playerBox = document.getElementById("playerBox");
         const themeIcon = document.getElementById("themeIcon");
 
-        initTheme();
+        // Initialization
+        window.onload = () => {
+            initTheme();
+            setupRipples();
+        };
 
-        searchBox.addEventListener("input", function (e) {
-            clearTimeout(searchDebounceTimer);
-            const query = this.value.trim();
-            if (!query) {
-                searchResults.innerHTML = '<div class="status-msg">🚀 Type to start searching...</div>';
-                return;
-            }
-            searchDebounceTimer = setTimeout(() => performSearch(query), 1);
-        });
-
-        searchBox.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") searchBox.blur();
-        });
-
-        audioPlayer.addEventListener('ended', () => {
-            playNext(true);
-        });
-
-        audioPlayer.onpause = () => playerThumb.classList.remove("playing");
-        audioPlayer.onplay = () => playerThumb.classList.add("playing");
-
-        function initTheme() {
-            const theme = localStorage.getItem(STORAGE_THEME) || 'dark';
-            if (theme === 'light') {
-                document.body.classList.add('light-mode');
-                updateThemeIcon(true);
-            }
-        }
-
+        // Theme Toggle
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             const isLight = document.body.classList.contains('light-mode');
             localStorage.setItem(STORAGE_THEME, isLight ? 'light' : 'dark');
-            updateThemeIcon(isLight);
+            themeIcon.innerText = isLight ? 'light_mode' : 'dark_mode';
         }
 
-        function updateThemeIcon(isLight) {
-            if (isLight) {
-                themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-            } else {
-                themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
-            }
+        function initTheme() {
+            const saved = localStorage.getItem(STORAGE_THEME);
+            if (saved === 'light') toggleTheme();
         }
 
+        // Tab System
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
 
-            document.querySelector(`button[onclick="switchTab('${tab}')"]`).classList.add('active');
+            event.target.classList.add('active');
             document.getElementById(`${tab}View`).classList.remove('hidden');
 
             if (tab === 'favorites') renderFavorites();
             if (tab === 'queue') renderQueue();
         }
 
-        async function performSearch(query) {
-            searchResults.classList.add('loading');
+        // Search Logic
+        searchBox.addEventListener("input", (e) => {
+            clearTimeout(searchTimer);
+            const query = e.target.value.trim();
+            if (!query) return;
+            searchTimer = setTimeout(() => performSearch(query), 500);
+        });
 
+        async function performSearch(query) {
+            searchResults.innerHTML = '<div class="status-msg">Searching...</div>';
             try {
                 const res = await fetch(API_BASE + encodeURIComponent(query));
-                const data = await res.json();
-
-                searchResults.classList.remove('loading');
-
-                if (!data.success || !data.data.results || data.data.results.length === 0) {
-                    searchResults.innerHTML = '<div class="status-msg">No results found 😔</div>';
+                const json = await res.json();
+                const results = json.data.results || [];
+                
+                if (results.length === 0) {
+                    searchResults.innerHTML = '<div class="status-msg">No results found</div>';
                     return;
                 }
 
-                const songs = data.data.results.map(s => ({
+                const songs = results.map(s => ({
                     id: s.id,
-                    title: (s.name || "Unknown").replace(/'/g, "&apos;").replace(/"/g, "&quot;"),
-                    artist: (s.artists?.primary?.map(a => a.name).join(", ") || "Unknown").replace(/'/g, "&apos;"),
-                    image: s.image?.[2]?.url || s.image?.[0]?.url || "",
-                    audio: s.downloadUrl?.[s.downloadUrl.length - 1]?.url
-                })).filter(s => s.audio);
+                    title: s.name,
+                    artist: s.artists.primary.map(a => a.name).join(", "),
+                    image: s.image[2].url,
+                    audio: s.downloadUrl[s.downloadUrl.length - 1].url
+                }));
 
                 renderGrid(songs, searchResults);
-
-            } catch (error) {
-                console.error(error);
-                searchResults.innerHTML = '<div class="status-msg">Error connecting to server.</div>';
+            } catch (e) {
+                searchResults.innerHTML = '<div class="status-msg">Error loading songs</div>';
             }
         }
 
+        // Render Helpers
         function renderGrid(songs, container) {
-            const fragment = document.createDocumentFragment();
             const favs = getFavorites();
-            const favIds = new Set(favs.map(f => f.id));
-
-            songs.forEach(song => {
-                const isFav = favIds.has(song.id);
-                const card = document.createElement('div');
-                card.className = 'card';
-
-                card.addEventListener('mouseenter', () => preloadAudio(song.audio));
-
-                card.innerHTML = `
-                <div class="card-actions">
-                    <button class="action-btn" title="Add to Queue" onclick="addToQueueUI(event, '${song.id}')">
-                        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    </button>
-                    <button class="action-btn fav ${isFav ? 'active' : ''}" onclick="toggleLike(event, '${song.id}')">
-                        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                    </button>
-                </div>
-                <div onclick="playNewSong('${song.id}')">
-                    <img src="${song.image}" loading="lazy" alt="${song.title}">
-                    <div class="card-content">
-                        <div class="card-title">${song.title}</div>
-                        <div class="card-artist">${song.artist}</div>
-                    </div>
-                </div>
-            `;
-                card.dataset.song = JSON.stringify(song);
-                fragment.appendChild(card);
-            });
-
-            container.innerHTML = '';
-            container.appendChild(fragment);
-        }
-
-        function preloadAudio(url) {
-            if (preloadCache.has(url)) return;
-            const audio = new Audio();
-            audio.src = url;
-            audio.preload = 'auto';
-            preloadCache.add(url);
-        }
-
-        function renderFavorites() {
-            const favs = getFavorites().reverse();
-            if (favs.length === 0) {
-                favResults.innerHTML = '<div class="status-msg">No favorites yet ❤️</div>';
-            } else {
-                renderGrid(favs, favResults);
-            }
-        }
-
-        function renderQueue() {
-            if (queue.length === 0) {
-                queueResults.innerHTML = '<div class="status-msg">Queue is empty 🎵</div>';
-                return;
-            }
-
-            let html = '';
-            queue.forEach((song, idx) => {
-                const isActive = (idx === queueIndex) ? 'active' : '';
-                html += `
-                <div class="queue-item ${isActive}">
-                    <img src="${song.image}" alt="">
-                    <div class="queue-info">
-                        <div style="font-weight:600; font-size:14px; color:var(--text-main)">${song.title}</div>
-                        <div style="font-size:12px; color:var(--text-muted)">${song.artist}</div>
-                    </div>
-                    <div class="queue-actions">
-                        <button class="queue-btn" onclick="moveQueueItem(${idx}, -1)" title="Move Up">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            container.innerHTML = songs.map(song => {
+                const isFav = favs.some(f => f.id === song.id);
+                return `
+                <div class="card ripple" onclick="playSong('${song.id}', ${JSON.stringify(song).replace(/"/g, '&quot;')})">
+                    <div class="card-actions">
+                        <button class="mini-fab" onclick="event.stopPropagation(); addToQueue(${JSON.stringify(song).replace(/"/g, '&quot;')})">
+                            <span class="material-symbols-rounded">add</span>
                         </button>
-                        <button class="queue-btn" onclick="moveQueueItem(${idx}, 1)" title="Move Down">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                        </button>
-                        <button class="queue-btn" onclick="playFromQueue(${idx})" title="Play">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        <button class="mini-fab" style="background: ${isFav ? '#ff4d4d' : 'var(--md-sys-color-primary)'}" onclick="event.stopPropagation(); toggleLike('${song.id}', ${JSON.stringify(song).replace(/"/g, '&quot;')})">
+                            <span class="material-symbols-rounded">${isFav ? 'favorite' : 'heart_plus'}</span>
                         </button>
                     </div>
+                    <img src="${song.image}" loading="lazy">
+                    <div class="card-title">${song.title}</div>
+                    <div class="card-artist">${song.artist}</div>
                 </div>
-             `;
-            });
-            queueResults.innerHTML = html;
+                `;
+            }).join('');
+            setupRipples();
         }
 
-        function moveQueueItem(index, direction) {
-            const newIndex = index + direction;
-            if (newIndex < 0 || newIndex >= queue.length) return;
-
-            const item = queue.splice(index, 1)[0];
-            queue.splice(newIndex, 0, item);
-
-            if (queueIndex === index) {
-                queueIndex = newIndex;
-            } else if (queueIndex === newIndex) {
-                queueIndex = index;
-            }
-
-            renderQueue();
-        }
-
-        function playNewSong(id) {
-            const card = document.querySelector(`.card[data-song*='${id}']`);
-            if (!card) return;
-            const song = JSON.parse(card.dataset.song);
-
-            queue.push(song);
-            queueIndex = queue.length - 1;
-
-            playSong(song);
-        }
-
-        function playSong(song) {
+        // Player Controls
+        function playSong(id, song) {
             currentSongData = song;
-
-            playerTitle.innerText = song.title;
-            playerArtist.innerText = song.artist;
-            playerThumb.src = song.image;
-            updatePlayerHeart();
-
-            playerBox.classList.add("active");
-            playerThumb.classList.add("playing");
-
-            audioPlayer.src = song.audio;
-            audioPlayer.play().catch(e => console.log("Autoplay blocked", e));
-
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.metadata = new MediaMetadata({
-                    title: song.title,
-                    artist: song.artist,
-                    artwork: [{ src: song.image, sizes: '500x500', type: 'image/jpeg' }]
-                });
-                navigator.mediaSession.setActionHandler('play', () => audioPlayer.play());
-                navigator.mediaSession.setActionHandler('pause', () => audioPlayer.pause());
-                navigator.mediaSession.setActionHandler('previoustrack', playPrev);
-                navigator.mediaSession.setActionHandler('nexttrack', playNext);
+            if (!queue.some(s => s.id === id)) {
+                queue.push(song);
+                queueIndex = queue.length - 1;
+            } else {
+                queueIndex = queue.findIndex(s => s.id === id);
             }
+
+            document.getElementById("currentTitle").innerText = song.title;
+            document.getElementById("currentArtist").innerText = song.artist;
+            document.getElementById("playerThumb").src = song.image;
+            audioPlayer.src = song.audio;
+            
+            playerBox.classList.add("active");
+            audioPlayer.play();
+            updatePlayerHeart();
         }
 
-        function playNext(auto = false) {
-            if (queue.length === 0) return;
-
+        function playNext() {
             if (queueIndex < queue.length - 1) {
                 queueIndex++;
-                playSong(queue[queueIndex]);
-                if (document.getElementById('queueView').style.display !== 'none') renderQueue();
-            } else {
-                if (auto) playerThumb.classList.remove("playing");
+                playSong(queue[queueIndex].id, queue[queueIndex]);
             }
         }
 
         function playPrev() {
             if (queueIndex > 0) {
                 queueIndex--;
-                playSong(queue[queueIndex]);
-                if (document.getElementById('queueView').style.display !== 'none') renderQueue();
-            } else {
-                audioPlayer.currentTime = 0;
-                audioPlayer.play();
+                playSong(queue[queueIndex].id, queue[queueIndex]);
             }
         }
 
-        function playFromQueue(idx) {
-            queueIndex = idx;
-            playSong(queue[idx]);
-            renderQueue();
-        }
+        audioPlayer.onended = () => playNext();
 
-        function addToQueueUI(e, id) {
-            e.stopPropagation();
-            const card = e.currentTarget.closest('.card');
-            const song = JSON.parse(card.dataset.song);
-
+        // Queue & Favorites
+        function addToQueue(song) {
             queue.push(song);
-            showToast("Added to Queue");
-
-            const btn = e.currentTarget;
-            const originalContent = btn.innerHTML;
-            btn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>';
-            setTimeout(() => btn.innerHTML = originalContent, 1000);
+            showToast("Added to queue");
         }
 
         function getFavorites() {
             return JSON.parse(localStorage.getItem(STORAGE_FAVS)) || [];
         }
 
-        function toggleLike(e, id) {
-            e.stopPropagation();
-            const btn = e.currentTarget;
-            const card = btn.closest('.card');
-            const songData = JSON.parse(card.dataset.song);
-
+        function toggleLike(id, song) {
             let favs = getFavorites();
-            const index = favs.findIndex(f => f.id === id);
-
-            if (index > -1) {
-                favs.splice(index, 1);
-                btn.classList.remove('active');
-                if (!document.getElementById('favoritesView').classList.contains('hidden')) {
-                    card.remove();
-                }
-                showToast("Removed from Favorites");
+            const idx = favs.findIndex(f => f.id === id);
+            if (idx > -1) {
+                favs.splice(idx, 1);
+                showToast("Removed from favorites");
             } else {
-                favs.push(songData);
-                btn.classList.add('active');
-                showToast("Added to Favorites");
+                favs.push(song);
+                showToast("Added to favorites");
             }
             localStorage.setItem(STORAGE_FAVS, JSON.stringify(favs));
-
-            if (currentSongData && currentSongData.id === id) updatePlayerHeart();
+            
+            // Refresh current view
+            if (!document.getElementById('favoritesView').classList.contains('hidden')) renderFavorites();
+            else performSearch(searchBox.value);
+            updatePlayerHeart();
         }
 
-        function togglePlayerFavorite() {
-            if (!currentSongData) return;
-            let favs = getFavorites();
-            const index = favs.findIndex(f => f.id === currentSongData.id);
+        function renderFavorites() {
+            const favs = getFavorites();
+            if (favs.length === 0) favResults.innerHTML = '<div class="status-msg">No favorites yet</div>';
+            else renderGrid(favs, favResults);
+        }
 
-            if (index > -1) {
-                favs.splice(index, 1);
-                showToast("Removed from Favorites");
-            } else {
-                favs.push(currentSongData);
-                showToast("Added to Favorites");
-            }
-            localStorage.setItem(STORAGE_FAVS, JSON.stringify(favs));
-            updatePlayerHeart();
-
-            if (!document.getElementById('searchView').classList.contains('hidden')) {
-                const btn = document.querySelector(`.card[data-song*='${currentSongData.id}'] .action-btn.fav`);
-                if (btn) btn.classList.toggle('active');
-            } else if (!document.getElementById('favoritesView').classList.contains('hidden')) {
-                renderFavorites();
-            }
+        function renderQueue() {
+            if (queue.length === 0) queueResults.innerHTML = '<div class="status-msg">Queue is empty</div>';
+            else renderGrid(queue, queueResults);
         }
 
         function updatePlayerHeart() {
-            const favs = getFavorites();
-            const isFav = favs.some(f => f.id === currentSongData.id);
-            if (isFav) playerFavBtn.classList.add('active');
-            else playerFavBtn.classList.remove('active');
+            if (!currentSongData) return;
+            const isFav = getFavorites().some(f => f.id === currentSongData.id);
+            const btn = document.getElementById("playerFavBtn");
+            btn.style.color = isFav ? "#ff4d4d" : "inherit";
+            btn.querySelector('span').innerText = isFav ? 'favorite' : 'heart_plus';
         }
 
-        function showToast(message) {
-            const container = document.getElementById("toast-container");
-            const toast = document.createElement("div");
-            toast.className = "toast";
-            toast.innerHTML = `<span>${message}</span>`;
-            container.appendChild(toast);
+        function togglePlayerFavorite() {
+            if (currentSongData) toggleLike(currentSongData.id, currentSongData);
+        }
 
-            setTimeout(() => {
-                toast.style.animation = "fadeIn 0.3s reverse forwards";
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
+        // Material UI Ripple Logic
+        function setupRipples() {
+            document.querySelectorAll('.ripple').forEach(button => {
+                button.onmousedown = function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const ripple = document.createElement('span');
+                    ripple.className = 'ripple-element';
+                    ripple.style.left = `${e.clientX - rect.left}px`;
+                    ripple.style.top = `${e.clientY - rect.top}px`;
+                    ripple.style.width = ripple.style.height = `${Math.max(rect.width, rect.height)}px`;
+                    this.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 600);
+                }
+            });
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById("toast-container");
+            const t = document.createElement("div");
+            t.className = "toast";
+            t.innerText = msg;
+            container.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
         }
     </script>
-
 </body>
-
 </html>

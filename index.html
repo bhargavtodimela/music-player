@@ -305,7 +305,7 @@
         searchInp.oninput = () => {
             clearTimeout(searchTimer);
             if(searchInp.value.length < 2) return;
-            searchTimer = setTimeout(() => search(searchInp.value), 400);
+            searchTimer = setTimeout(() => search(searchInp.value), 10);
         };
 
         // --- Core Fetcher ---

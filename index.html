@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura Sonoma — Ultimate Production</title>
+    <title>Aura Sonoma — Platinum Edition</title>
     
-    <!-- Preconnect for Extreme Speed -->
+    <!-- Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://c.saavncdn.com" crossorigin>
@@ -18,22 +18,22 @@
             --primary: #D0BCFF;
             --on-primary: #381E72;
             --primary-container: #4F378B;
-            --surface: #0A0A0C;
-            --on-surface: #F4F4F9;
-            --surface-variant: rgba(255, 255, 255, 0.12);
-            --glass: rgba(20, 20, 25, 0.8);
+            --surface: #0A0A0D;
+            --on-surface: #E6E1E5;
+            --surface-variant: #25232A;
+            --glass: rgba(15, 15, 20, 0.85);
             --progress: 0%;
-            --apple-ease: cubic-bezier(0.23, 1, 0.32, 1);
+            --apple-ease: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.light-mode {
             --primary: #6750A4;
             --on-primary: #FFFFFF;
             --primary-container: #EADDFF;
-            --surface: #F5F5F7;
-            --on-surface: #1C1C1E;
-            --surface-variant: rgba(0, 0, 0, 0.08);
-            --glass: rgba(255, 255, 255, 0.8);
+            --surface: #FFFBFE;
+            --on-surface: #1C1B1F;
+            --surface-variant: #E7E0EB;
+            --glass: rgba(255, 255, 255, 0.85);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -44,103 +44,107 @@
             color: var(--on-surface);
             margin: 0; padding: 0;
             height: 100vh; overflow: hidden;
-            transition: background 0.5s ease;
+            transition: background 0.5s var(--apple-ease);
         }
 
-        /* Loaders */
-        #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 3px;
-            background: transparent; z-index: 9999; overflow: hidden; display: none;
+        /* Material Icons Global Fix */
+        .material-symbols-rounded {
+            color: inherit; /* Inherits from parent, which we control */
+            display: inline-block;
+            vertical-align: middle;
         }
-        #loader.active { display: block; }
-        .loader-fill { width: 40%; height: 100%; background: var(--primary); position: absolute; left: -40%; animation: flow 1.2s infinite linear; }
-        @keyframes flow { from { left: -40%; } to { left: 100%; } }
 
         /* Header */
         header { 
             padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; 
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             background: var(--glass); position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .brand { font-size: 22px; font-weight: 700; color: var(--primary); letter-spacing: -1.5px; }
+        .brand { font-size: 24px; font-weight: 700; color: var(--primary); letter-spacing: -1.5px; }
 
         .status-badge { 
             display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700;
             background: var(--surface-variant); padding: 6px 14px; border-radius: 20px;
+            color: var(--on-surface);
         }
         .dot { width: 8px; height: 8px; border-radius: 50%; }
         .dot.online { background: #34C759; box-shadow: 0 0 10px #34C759; }
-        .dot.offline { background: #FF3B30; }
 
-        /* Content Area */
+        /* Search & Chips */
         main { height: calc(100vh - 70px); overflow-y: auto; padding: 20px 20px 200px; scrollbar-width: none; }
         main::-webkit-scrollbar { display: none; }
 
         .search-bar { 
             background: var(--surface-variant); border-radius: 20px; height: 56px;
             display: flex; align-items: center; padding: 0 20px;
-            transition: 0.4s var(--apple-ease); margin-bottom: 20px;
+            transition: 0.3s var(--apple-ease); margin-bottom: 20px;
         }
-        .search-bar:focus-within { background: var(--surface); box-shadow: 0 0 0 2px var(--primary); }
+        .search-bar:focus-within { background: var(--surface); border: 2px solid var(--primary); }
         .search-bar input { flex: 1; background: none; border: none; color: var(--on-surface); font-size: 16px; margin-left: 12px; }
+        .search-bar .material-symbols-rounded { color: var(--primary); }
 
         .chips { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; margin-bottom: 25px; }
-        .chip { background: var(--surface-variant); padding: 10px 20px; border-radius: 14px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .chip { background: var(--surface-variant); padding: 10px 20px; border-radius: 14px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.3s; color: var(--on-surface); }
         .chip.active { background: var(--primary); color: var(--on-primary); }
 
-        /* Song Cards */
+        /* Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 18px; }
         .card { 
             background: var(--surface-variant); border-radius: 28px; padding: 12px;
             transition: 0.4s var(--apple-ease); cursor: pointer; position: relative;
         }
-        .card:hover { transform: translateY(-8px) scale(1.02); background: rgba(255,255,255,0.18); }
+        .card:hover { transform: translateY(-10px); background: rgba(120, 120, 150, 0.2); }
         .card img { width: 100%; aspect-ratio: 1; border-radius: 20px; object-fit: cover; margin-bottom: 10px; }
         
-        /* Fixed Visible Icons */
+        /* Always Visible Card Download Button */
         .card-dl { 
-            position: absolute; top: 18px; right: 18px; width: 38px; height: 38px;
-            background: var(--primary); color: var(--on-primary);
+            position: absolute; top: 18px; right: 18px; width: 40px; height: 40px;
+            background: var(--primary); color: var(--on-primary) !important;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            z-index: 5; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            z-index: 5; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
+        .card-dl .material-symbols-rounded { color: var(--on-primary) !important; font-size: 22px; }
 
-        .card .t { font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 4px; }
-        .card .a { font-size: 12px; opacity: 0.6; padding: 0 4px; }
+        .card .t { font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--on-surface); }
+        .card .a { font-size: 12px; opacity: 0.6; color: var(--on-surface); }
 
-        /* Floating Mini Player */
+        /* Mini Player */
         #miniPlayer {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(250%);
             width: calc(100% - 40px); max-width: 550px; height: 76px;
             background: var(--glass); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
             border-radius: 24px; display: flex; align-items: center; padding: 0 16px; gap: 16px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5); z-index: 1000;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6); z-index: 1000;
             border: 1px solid rgba(255,255,255,0.1); transition: transform 0.6s var(--apple-ease);
         }
         #miniPlayer.active { transform: translateX(-50%) translateY(0); }
         .m-art { width: 52px; height: 52px; border-radius: 12px; object-fit: cover; }
         .m-info { flex: 1; overflow: hidden; }
-        .m-info h4 { margin: 0; font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .m-info h4 { margin: 0; font-size: 14px; font-weight: 700; color: var(--on-surface); }
+        .m-btn { color: var(--primary) !important; }
 
-        /* Full Player Overhaul */
+        /* Full Screen Player */
         #fullPlayer {
             position: fixed; inset: 0; background: var(--surface); z-index: 2000;
             display: none; flex-direction: column; padding: 40px 30px;
         }
         .f-nav { display: flex; justify-content: space-between; align-items: center; }
+        .f-nav .material-symbols-rounded { color: var(--on-surface) !important; font-size: 32px; }
+        
         .f-art-wrap { flex: 1; display: flex; align-items: center; justify-content: center; }
-        .f-img { width: 85vw; max-width: 350px; aspect-ratio: 1; border-radius: 35px; box-shadow: 0 40px 100px rgba(0,0,0,0.7); transition: 0.8s var(--apple-ease); }
+        .f-img { width: 85vw; max-width: 350px; aspect-ratio: 1; border-radius: 35px; box-shadow: 0 40px 100px rgba(0,0,0,0.8); }
         
         .f-meta { text-align: left; width: 100%; max-width: 450px; margin: 0 auto 20px; }
-        .f-meta h2 { margin: 0; font-size: 28px; font-weight: 700; }
-        .f-meta p { margin: 6px 0 0; font-size: 18px; color: var(--primary); }
+        .f-meta h2 { margin: 0; font-size: 28px; font-weight: 700; color: var(--on-surface); }
+        .f-meta p { margin: 6px 0 0; font-size: 18px; color: var(--primary); font-weight: 500; }
 
-        .f-controls-card {
-            background: var(--surface-variant); backdrop-filter: blur(20px);
-            padding: 30px; border-radius: 35px; width: 100%; max-width: 500px;
-            margin: 0 auto; border: 1px solid rgba(255,255,255,0.1);
+        /* Controls Panel */
+        .controls-card {
+            background: var(--surface-variant); padding: 30px; border-radius: 35px;
+            width: 100%; max-width: 500px; margin: 0 auto;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-
         .slider { 
             -webkit-appearance: none; width: 100%; height: 6px; border-radius: 10px;
             background: linear-gradient(to right, var(--primary) var(--progress), rgba(255,255,255,0.1) var(--progress));
@@ -151,32 +155,27 @@
         .f-btns { display: flex; justify-content: space-between; align-items: center; margin: 25px 0; }
         .play-big { 
             width: 80px; height: 80px; border-radius: 50%; background: var(--primary);
-            color: var(--on-primary); display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 25px var(--primary-container);
+            color: var(--on-primary) !important; display: flex; align-items: center; justify-content: center;
         }
-        .icon-btn { color: var(--on-surface); cursor: pointer; padding: 12px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .icon-btn .material-symbols-rounded { font-size: 28px; }
+        .play-big .material-symbols-rounded { color: var(--on-primary) !important; font-size: 55px; }
 
-        footer { text-align: center; padding: 60px 0; font-size: 12px; opacity: 0.4; font-weight: 700; }
+        .f-btns .material-symbols-rounded { color: var(--on-surface) !important; font-size: 35px; }
 
+        /* Toast & Modal */
         #toast { 
             position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%);
             background: var(--on-surface); color: var(--surface);
             padding: 12px 30px; border-radius: 40px; font-weight: 700;
-            opacity: 0; transition: 0.5s var(--apple-ease); z-index: 9999;
+            opacity: 0; transition: 0.4s var(--apple-ease); z-index: 9999;
         }
 
-        #modal { 
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px);
-            z-index: 10000; display: none; align-items: center; justify-content: center; padding: 30px;
-        }
-        .modal-card { background: var(--glass); padding: 40px; border-radius: 35px; max-width: 450px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-filled { background: var(--primary); color: var(--on-primary); border: none; padding: 14px 40px; border-radius: 20px; font-weight: 700; cursor: pointer; margin-top: 20px; }
+        footer { text-align: center; padding: 60px 0; font-size: 12px; opacity: 0.4; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.1); }
 
-        @media (max-width: 600px) {
-            .grid { grid-template-columns: 1fr 1fr; gap: 14px; }
-            .f-img { max-width: 290px; }
-            .f-meta h2 { font-size: 22px; }
+        /* Utils */
+        .icon-btn { 
+            background: none; border: none; cursor: pointer; 
+            padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: var(--on-surface);
         }
     </style>
 </head>
@@ -187,40 +186,39 @@
     <header>
         <div class="brand">AURA</div>
         <div class="status-badge" id="netStatus"><div class="dot online"></div> ONLINE</div>
-        <button class="icon-btn" onclick="toggleTheme()"><span class="material-symbols-rounded" id="themeIcon">dark_mode</span></button>
+        <button class="icon-btn" onclick="toggleTheme()" style="color:var(--on-surface)"><span class="material-symbols-rounded" id="themeIcon">dark_mode</span></button>
     </header>
 
     <main>
         <div class="search-area">
             <div class="search-bar">
-                <span class="material-symbols-rounded" style="color:var(--primary)">search</span>
-                <input type="text" id="searchInp" placeholder="Search for tracks, artists..." autocomplete="off">
+                <span class="material-symbols-rounded">search</span>
+                <input type="text" id="searchInp" placeholder="Search for music, artists..." autocomplete="off">
             </div>
             <div class="chips">
-                <div class="chip active" onclick="search('Trending Hindi Mix', this)">Trending</div>
-                <div class="chip" onclick="search('Pop Hits 2024', this)">Pop Hits</div>
-                <div class="chip" onclick="search('Lo-fi Focus', this)">Lo-fi Focus</div>
-                <div class="chip" onclick="search('Bollywood Party', this)">Party</div>
+                <div class="chip active" onclick="search('Trending Hindi Hits', this)">Trending</div>
+                <div class="chip" onclick="search('New English Pop', this)">Global</div>
+                <div class="chip" onclick="search('Lofi Study Mix', this)">Lo-fi</div>
+                <div class="chip" onclick="search('Bollywood Party Hits', this)">Party</div>
             </div>
         </div>
         <div class="grid" id="mainGrid"></div>
-        <footer>
-            MADE BY BHARGAV TODIMELA<br><br>
-            <span style="text-decoration: underline; cursor:pointer;" onclick="toggleModal(true)">DISCLAIMER</span>
-        </footer>
+        <footer>MADE BY BHARGAV TODIMELA</footer>
     </main>
 
     <!-- Mini Player -->
     <div id="miniPlayer" onclick="expandPlayer(true)">
         <img src="" id="mArt" class="m-art">
-        <div class="m-info"><h4 id="mTitle">Not Playing</h4><span id="mArtist" style="font-size:12px;opacity:0.6">Sonoma Ultimate</span></div>
-        <button class="icon-btn" onclick="event.stopPropagation(); togglePlay()"><span class="material-symbols-rounded" id="mPlayIcon" style="font-size:45px; color:var(--primary)">play_arrow</span></button>
+        <div class="m-info"><h4 id="mTitle">Not Playing</h4><span id="mArtist" style="font-size:12px;opacity:0.6">Aura Sonoma</span></div>
+        <button class="icon-btn m-btn" onclick="event.stopPropagation(); togglePlay()">
+            <span class="material-symbols-rounded" id="mPlayIcon" style="font-size:45px">play_arrow</span>
+        </button>
     </div>
 
     <!-- Full Player -->
     <div id="fullPlayer">
         <div class="f-nav">
-            <button class="icon-btn" onclick="expandPlayer(false)"><span class="material-symbols-rounded" style="font-size:35px">expand_more</span></button>
+            <button class="icon-btn" onclick="expandPlayer(false)"><span class="material-symbols-rounded">expand_more</span></button>
             <span style="font-size:12px; font-weight:700; opacity:0.4; letter-spacing:2px">NOW PLAYING</span>
             <button class="icon-btn" onclick="downloadCurrent()"><span class="material-symbols-rounded">download</span></button>
         </div>
@@ -232,7 +230,7 @@
             <p id="fArtist">Artist Name</p>
         </div>
 
-        <div class="f-controls-card">
+        <div class="controls-card">
             <div class="seeker-box">
                 <input type="range" class="slider" id="seeker" value="0">
                 <div style="display:flex; justify-content: space-between; margin-top:12px; font-family:'Roboto Mono'; font-size:12px; opacity:0.6; font-weight:700">
@@ -242,12 +240,12 @@
 
             <div class="f-btns">
                 <button class="icon-btn" onclick="toggleShuffle()"><span class="material-symbols-rounded">shuffle</span></button>
-                <div style="display:flex; align-items:center; gap:15px">
-                    <button class="icon-btn" onclick="prev()"><span class="material-symbols-rounded" style="font-size:48px">skip_previous</span></button>
-                    <div class="play-big" onclick="togglePlay()"><span class="material-symbols-rounded" style="font-size:55px" id="fPlayIcon">play_arrow</span></div>
-                    <button class="icon-btn" onclick="next()"><span class="material-symbols-rounded" style="font-size:48px">skip_next</span></button>
+                <div style="display:flex; align-items:center; gap:20px">
+                    <button class="icon-btn" onclick="prev()"><span class="material-symbols-rounded">skip_previous</span></button>
+                    <div class="play-big" onclick="togglePlay()"><span class="material-symbols-rounded" id="fPlayIcon">play_arrow</span></div>
+                    <button class="icon-btn" onclick="next()"><span class="material-symbols-rounded">skip_next</span></button>
                 </div>
-                <button class="icon-btn" onclick="toggleLoop()"><span class="material-symbols-rounded" id="loop">repeat</span></button>
+                <button class="icon-btn" onclick="toggleLoop()"><span class="material-symbols-rounded">repeat</span></button>
             </div>
 
             <div style="display:flex; align-items:center; justify-content: space-between;">
@@ -260,18 +258,8 @@
         </div>
     </div>
 
-    <!-- Modal -->
-    <div id="modal" onclick="toggleModal(false)">
-        <div class="modal-card" onclick="event.stopPropagation()">
-            <span class="material-symbols-rounded" style="font-size: 60px; color: var(--primary); margin-bottom: 20px;">verified_user</span>
-            <h3>Service Status</h3>
-            <p>Aura utilizes a community-maintained API. This build includes hover-prefetching and live-debounced search for the fastest experience possible.</p>
-            <button class="btn-filled" onclick="toggleModal(false)">PROCEED</button>
-        </div>
-    </div>
-
     <div id="toast">Message</div>
-    <audio id="audio" crossorigin="anonymous" preload="auto"></audio>
+    <audio id="audio" crossorigin="anonymous"></audio>
 
     <script>
         const API = "https://jiosaavn-api.bhargavtodimela4.workers.dev/api";
@@ -283,24 +271,15 @@
         let sIdx = 0;
         let searchTimer;
 
-        // --- Instant Search (AS YOU TYPE) ---
+        // --- AS-YOU-TYPE Search ---
         const searchInp = document.getElementById('searchInp');
         searchInp.oninput = () => {
             clearTimeout(searchTimer);
-            const q = searchInp.value.trim();
-            if(q.length < 2) return;
-            searchTimer = setTimeout(() => search(q), 400); // 400ms Debounce
+            if(searchInp.value.length < 2) return;
+            searchTimer = setTimeout(() => search(searchInp.value), 400);
         };
 
-        // --- Connection Check ---
-        function checkNet() {
-            const online = navigator.onLine;
-            document.getElementById('netStatus').innerHTML = `<div class="dot ${online ? 'online' : 'offline'}"></div> ${online ? 'Online' : 'Offline'}`;
-        }
-        window.addEventListener('online', checkNet);
-        window.addEventListener('offline', checkNet);
-
-        // --- Fetch Engine ---
+        // --- Core Engine ---
         async function fetchAura(url) {
             document.getElementById('loader').classList.add('active');
             try {
@@ -332,7 +311,7 @@
                 <div class="card" onclick="playSong(${i})" onmouseenter="prefetch('${s.url}')">
                     <img src="${s.image}" loading="eager">
                     <div class="card-dl" onclick="event.stopPropagation(); downloadManual(${i})">
-                        <span class="material-symbols-rounded" style="font-size:20px">download</span>
+                        <span class="material-symbols-rounded">download</span>
                     </div>
                     <div class="t">${s.name}</div>
                     <div class="a">${s.artist}</div>
@@ -340,21 +319,18 @@
             `).join('');
         }
 
-        // --- Prefetch Engine ---
         function prefetch(url) {
-            const link = document.createElement('link');
-            link.rel = 'prefetch';
-            link.href = url;
-            link.as = 'audio';
-            document.head.appendChild(link);
+            const l = document.createElement('link');
+            l.rel = 'prefetch'; l.href = url; l.as = 'audio';
+            document.head.appendChild(l);
         }
 
-        // --- Player Core ---
+        // --- Player ---
         function playSong(idx) {
             curIdx = idx;
             const s = queue[curIdx];
             audio.src = s.url;
-            audio.play().catch(() => showToast("Syncing Stream..."));
+            audio.play();
             document.getElementById('miniPlayer').classList.add('active');
             updateUI(s);
             updateMediaSession(s);
@@ -393,7 +369,7 @@
         document.getElementById('seeker').oninput = (e) => audio.currentTime = (e.target.value / 100) * audio.duration;
         audio.onended = () => isLoop ? audio.play() : next();
 
-        // --- Controls ---
+        // --- Features ---
         document.getElementById('volCtrl').oninput = (e) => audio.volume = e.target.value;
 
         function cycleSpeed() {
@@ -409,24 +385,21 @@
 
         async function downloadManual(idx) {
             const s = queue[idx];
-            showToast("Starting Download...");
+            showToast("Downloading...");
             try {
                 const r = await fetch(s.url);
                 const b = await r.blob();
                 const u = URL.createObjectURL(b);
                 const a = document.createElement('a');
                 a.href = u; a.download = `${s.name} - Aura.mp3`;
-                document.body.appendChild(a);
-                a.click();
-                URL.revokeObjectURL(u);
-                document.body.removeChild(a);
+                document.body.appendChild(a); a.click();
+                URL.revokeObjectURL(u); document.body.removeChild(a);
             } catch(e) { window.open(s.url, '_blank'); }
         }
 
         function downloadCurrent() { if(curIdx !== -1) downloadManual(curIdx); }
 
-        // --- UI Utils ---
-        function toggleModal(s) { document.getElementById('modal').style.display = s ? 'flex' : 'none'; }
+        // --- Utils ---
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             document.getElementById('themeIcon').innerText = document.body.classList.contains('light-mode') ? 'light_mode' : 'dark_mode';
@@ -449,7 +422,7 @@
             }
         }
 
-        window.onload = () => { checkNet(); search("Trending Hindi Mix"); };
+        window.onload = () => search("Trending Hindi Mix");
     </script>
 </body>
 </html>

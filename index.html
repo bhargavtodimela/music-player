@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura Sonoma — Platinum Edition</title>
+    <title>Aura Infinity — Final Master</title>
     
-    <!-- Preconnect -->
+    <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://c.saavncdn.com" crossorigin>
@@ -18,21 +18,21 @@
             --primary: #D0BCFF;
             --on-primary: #381E72;
             --primary-container: #4F378B;
-            --surface: #0A0A0D;
+            --surface: #0A0A0C;
             --on-surface: #E6E1E5;
-            --surface-variant: #25232A;
-            --glass: rgba(15, 15, 20, 0.85);
+            --surface-variant: rgba(255, 255, 255, 0.12);
+            --glass: rgba(18, 18, 22, 0.85);
             --progress: 0%;
-            --apple-ease: cubic-bezier(0.4, 0, 0.2, 1);
+            --apple-ease: cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         body.light-mode {
             --primary: #6750A4;
             --on-primary: #FFFFFF;
             --primary-container: #EADDFF;
-            --surface: #FFFBFE;
+            --surface: #F5F5F7;
             --on-surface: #1C1B1F;
-            --surface-variant: #E7E0EB;
+            --surface-variant: rgba(0, 0, 0, 0.08);
             --glass: rgba(255, 255, 255, 0.85);
         }
 
@@ -44,72 +44,87 @@
             color: var(--on-surface);
             margin: 0; padding: 0;
             height: 100vh; overflow: hidden;
-            transition: background 0.5s var(--apple-ease);
+            transition: background 0.5s ease;
         }
 
-        /* Material Icons Global Fix */
+        /* Material Icons Visibility Fix */
         .material-symbols-rounded {
-            color: inherit; /* Inherits from parent, which we control */
-            display: inline-block;
-            vertical-align: middle;
+            color: var(--on-surface);
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            transition: color 0.3s ease;
         }
+        .primary-icon { color: var(--primary) !important; }
+
+        /* Internet Status */
+        #offlineBanner {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: #B00020; color: white; padding: 10px;
+            text-align: center; font-size: 11px; font-weight: 700;
+            z-index: 10001; transform: translateY(-100%); transition: 0.4s var(--apple-ease);
+        }
+        #offlineBanner.show { transform: translateY(0); }
+
+        /* Loader */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 3px;
+            background: transparent; z-index: 9999; overflow: hidden; display: none;
+        }
+        #loader.active { display: block; }
+        .loader-fill { width: 40%; height: 100%; background: var(--primary); position: absolute; left: -40%; animation: flow 1.2s infinite linear; }
+        @keyframes flow { from { left: -40%; } to { left: 100%; } }
 
         /* Header */
         header { 
             padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; 
             backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             background: var(--glass); position: sticky; top: 0; z-index: 100;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .brand { font-size: 24px; font-weight: 700; color: var(--primary); letter-spacing: -1.5px; }
-
+        .brand { font-size: 22px; font-weight: 700; color: var(--primary); letter-spacing: -1.5px; }
         .status-badge { 
             display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700;
             background: var(--surface-variant); padding: 6px 14px; border-radius: 20px;
-            color: var(--on-surface);
         }
-        .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; transition: 0.3s; }
         .dot.online { background: #34C759; box-shadow: 0 0 10px #34C759; }
+        .dot.offline { background: #FF3B30; }
 
-        /* Search & Chips */
+        /* Content Area */
         main { height: calc(100vh - 70px); overflow-y: auto; padding: 20px 20px 200px; scrollbar-width: none; }
         main::-webkit-scrollbar { display: none; }
 
         .search-bar { 
             background: var(--surface-variant); border-radius: 20px; height: 56px;
             display: flex; align-items: center; padding: 0 20px;
-            transition: 0.3s var(--apple-ease); margin-bottom: 20px;
+            transition: 0.4s var(--apple-ease); margin-bottom: 20px;
         }
-        .search-bar:focus-within { background: var(--surface); border: 2px solid var(--primary); }
+        .search-bar:focus-within { background: var(--surface); box-shadow: 0 0 0 2px var(--primary); }
         .search-bar input { flex: 1; background: none; border: none; color: var(--on-surface); font-size: 16px; margin-left: 12px; }
-        .search-bar .material-symbols-rounded { color: var(--primary); }
 
         .chips { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; margin-bottom: 25px; }
         .chip { background: var(--surface-variant); padding: 10px 20px; border-radius: 14px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.3s; color: var(--on-surface); }
         .chip.active { background: var(--primary); color: var(--on-primary); }
 
-        /* Grid */
+        /* Song Cards */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 18px; }
         .card { 
             background: var(--surface-variant); border-radius: 28px; padding: 12px;
             transition: 0.4s var(--apple-ease); cursor: pointer; position: relative;
         }
-        .card:hover { transform: translateY(-10px); background: rgba(120, 120, 150, 0.2); }
+        .card:hover { transform: translateY(-8px) scale(1.02); background: rgba(120, 120, 150, 0.2); }
         .card img { width: 100%; aspect-ratio: 1; border-radius: 20px; object-fit: cover; margin-bottom: 10px; }
         
-        /* Always Visible Card Download Button */
         .card-dl { 
             position: absolute; top: 18px; right: 18px; width: 40px; height: 40px;
-            background: var(--primary); color: var(--on-primary) !important;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            background: var(--primary); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center;
             z-index: 5; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
-        .card-dl .material-symbols-rounded { color: var(--on-primary) !important; font-size: 22px; }
+        .card-dl .material-symbols-rounded { color: var(--on-primary); }
 
         .card .t { font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--on-surface); }
         .card .a { font-size: 12px; opacity: 0.6; color: var(--on-surface); }
 
-        /* Mini Player */
+        /* Floating Mini Player */
         #miniPlayer {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(250%);
             width: calc(100% - 40px); max-width: 550px; height: 76px;
@@ -122,28 +137,27 @@
         .m-art { width: 52px; height: 52px; border-radius: 12px; object-fit: cover; }
         .m-info { flex: 1; overflow: hidden; }
         .m-info h4 { margin: 0; font-size: 14px; font-weight: 700; color: var(--on-surface); }
-        .m-btn { color: var(--primary) !important; }
 
-        /* Full Screen Player */
+        /* Expanded Player UI */
         #fullPlayer {
             position: fixed; inset: 0; background: var(--surface); z-index: 2000;
             display: none; flex-direction: column; padding: 40px 30px;
+            transition: background 0.8s var(--apple-ease);
         }
         .f-nav { display: flex; justify-content: space-between; align-items: center; }
-        .f-nav .material-symbols-rounded { color: var(--on-surface) !important; font-size: 32px; }
-        
+        .f-nav .material-symbols-rounded { font-size: 32px; }
+
         .f-art-wrap { flex: 1; display: flex; align-items: center; justify-content: center; }
-        .f-img { width: 85vw; max-width: 350px; aspect-ratio: 1; border-radius: 35px; box-shadow: 0 40px 100px rgba(0,0,0,0.8); }
+        .f-img { width: 85vw; max-width: 350px; aspect-ratio: 1; border-radius: 35px; box-shadow: 0 40px 100px rgba(0,0,0,0.7); }
         
         .f-meta { text-align: left; width: 100%; max-width: 450px; margin: 0 auto 20px; }
         .f-meta h2 { margin: 0; font-size: 28px; font-weight: 700; color: var(--on-surface); }
         .f-meta p { margin: 6px 0 0; font-size: 18px; color: var(--primary); font-weight: 500; }
 
-        /* Controls Panel */
         .controls-card {
-            background: var(--surface-variant); padding: 30px; border-radius: 35px;
-            width: 100%; max-width: 500px; margin: 0 auto;
-            border: 1px solid rgba(255,255,255,0.1);
+            background: var(--surface-variant); backdrop-filter: blur(20px);
+            padding: 30px; border-radius: 35px; width: 100%; max-width: 500px;
+            margin: 0 auto; border: 1px solid rgba(255,255,255,0.1);
         }
         .slider { 
             -webkit-appearance: none; width: 100%; height: 6px; border-radius: 10px;
@@ -155,11 +169,9 @@
         .f-btns { display: flex; justify-content: space-between; align-items: center; margin: 25px 0; }
         .play-big { 
             width: 80px; height: 80px; border-radius: 50%; background: var(--primary);
-            color: var(--on-primary) !important; display: flex; align-items: center; justify-content: center;
+            color: var(--on-primary); display: flex; align-items: center; justify-content: center;
         }
         .play-big .material-symbols-rounded { color: var(--on-primary) !important; font-size: 55px; }
-
-        .f-btns .material-symbols-rounded { color: var(--on-surface) !important; font-size: 35px; }
 
         /* Toast & Modal */
         #toast { 
@@ -168,51 +180,53 @@
             padding: 12px 30px; border-radius: 40px; font-weight: 700;
             opacity: 0; transition: 0.4s var(--apple-ease); z-index: 9999;
         }
+        #modal { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(20px);
+            z-index: 11000; display: none; align-items: center; justify-content: center; padding: 30px;
+        }
+        .modal-card { background: var(--glass); padding: 40px; border-radius: 35px; max-width: 450px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-filled { background: var(--primary); color: var(--on-primary); border: none; padding: 14px 40px; border-radius: 20px; font-weight: 700; cursor: pointer; margin-top: 20px; }
 
         footer { text-align: center; padding: 60px 0; font-size: 12px; opacity: 0.4; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.1); }
-
-        /* Utils */
-        .icon-btn { 
-            background: none; border: none; cursor: pointer; 
-            padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: var(--on-surface);
-        }
+        .icon-btn { background: none; border: none; cursor: pointer; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
 
+    <div id="offlineBanner">OFFLINE: PLAYBACK & SEARCH ARE LIMITED</div>
     <div id="loader"><div class="loader-fill"></div></div>
 
     <header>
         <div class="brand">AURA</div>
         <div class="status-badge" id="netStatus"><div class="dot online"></div> ONLINE</div>
-        <button class="icon-btn" onclick="toggleTheme()" style="color:var(--on-surface)"><span class="material-symbols-rounded" id="themeIcon">dark_mode</span></button>
+        <button class="icon-btn" onclick="toggleTheme()"><span class="material-symbols-rounded" id="themeIcon">dark_mode</span></button>
     </header>
 
     <main>
         <div class="search-area">
             <div class="search-bar">
-                <span class="material-symbols-rounded">search</span>
-                <input type="text" id="searchInp" placeholder="Search for music, artists..." autocomplete="off">
+                <span class="material-symbols-rounded primary-icon">search</span>
+                <input type="text" id="searchInp" placeholder="Search for tracks, artists..." autocomplete="off">
             </div>
             <div class="chips">
-                <div class="chip active" onclick="search('Trending Hindi Hits', this)">Trending</div>
-                <div class="chip" onclick="search('New English Pop', this)">Global</div>
-                <div class="chip" onclick="search('Lofi Study Mix', this)">Lo-fi</div>
-                <div class="chip" onclick="search('Bollywood Party Hits', this)">Party</div>
+                <div class="chip active" onclick="search('Trending Hindi Mix', this)">Trending</div>
+                <div class="chip" onclick="search('English Pop 2024', this)">Global Pop</div>
+                <div class="chip" onclick="search('Lo-fi Focus Mix', this)">Lo-fi Focus</div>
+                <div class="chip" onclick="search('90s Bollywood gold', this)">90s Classics</div>
             </div>
         </div>
         <div class="grid" id="mainGrid"></div>
-        <footer>MADE BY BHARGAV TODIMELA</footer>
+        <footer>
+            MADE BY BHARGAV TODIMELA<br><br>
+            <span style="text-decoration: underline; cursor:pointer;" onclick="toggleModal(true)">DISCLAIMER</span>
+        </footer>
     </main>
 
     <!-- Mini Player -->
     <div id="miniPlayer" onclick="expandPlayer(true)">
         <img src="" id="mArt" class="m-art">
-        <div class="m-info"><h4 id="mTitle">Not Playing</h4><span id="mArtist" style="font-size:12px;opacity:0.6">Aura Sonoma</span></div>
-        <button class="icon-btn m-btn" onclick="event.stopPropagation(); togglePlay()">
-            <span class="material-symbols-rounded" id="mPlayIcon" style="font-size:45px">play_arrow</span>
-        </button>
+        <div class="m-info"><h4 id="mTitle">Not Playing</h4><span id="mArtist" style="font-size:12px;opacity:0.6">Ready to play</span></div>
+        <button class="icon-btn" onclick="event.stopPropagation(); togglePlay()"><span class="material-symbols-rounded primary-icon" id="mPlayIcon" style="font-size:45px">play_arrow</span></button>
     </div>
 
     <!-- Full Player -->
@@ -224,11 +238,7 @@
         </div>
 
         <div class="f-art-wrap"><img src="" id="fArt" class="f-img"></div>
-        
-        <div class="f-meta">
-            <h2 id="fTitle">Song Title</h2>
-            <p id="fArtist">Artist Name</p>
-        </div>
+        <div class="f-meta"><h2 id="fTitle">Song Title</h2><p id="fArtist">Artist Name</p></div>
 
         <div class="controls-card">
             <div class="seeker-box">
@@ -240,12 +250,12 @@
 
             <div class="f-btns">
                 <button class="icon-btn" onclick="toggleShuffle()"><span class="material-symbols-rounded">shuffle</span></button>
-                <div style="display:flex; align-items:center; gap:20px">
-                    <button class="icon-btn" onclick="prev()"><span class="material-symbols-rounded">skip_previous</span></button>
+                <div style="display:flex; align-items:center; gap:15px">
+                    <button class="icon-btn" onclick="prev()"><span class="material-symbols-rounded" style="font-size:48px">skip_previous</span></button>
                     <div class="play-big" onclick="togglePlay()"><span class="material-symbols-rounded" id="fPlayIcon">play_arrow</span></div>
-                    <button class="icon-btn" onclick="next()"><span class="material-symbols-rounded">skip_next</span></button>
+                    <button class="icon-btn" onclick="next()"><span class="material-symbols-rounded" style="font-size:48px">skip_next</span></button>
                 </div>
-                <button class="icon-btn" onclick="toggleLoop()"><span class="material-symbols-rounded">repeat</span></button>
+                <button class="icon-btn" onclick="toggleLoop()"><span class="material-symbols-rounded" id="loop">repeat</span></button>
             </div>
 
             <div style="display:flex; align-items:center; justify-content: space-between;">
@@ -258,8 +268,18 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div id="modal" onclick="toggleModal(false)">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <span class="material-symbols-rounded primary-icon" style="font-size: 60px; margin-bottom: 20px;">info</span>
+            <h3>Disclaimer</h3>
+            <p>Since we use an unofficial JioSaavn API, it is common to see errors in playback and throttling by the servers. We are always trying make our services useful to you. Thank you for using Aura.</p>
+            <button class="btn-filled" onclick="toggleModal(false)">PROCEED</button>
+        </div>
+    </div>
+
     <div id="toast">Message</div>
-    <audio id="audio" crossorigin="anonymous"></audio>
+    <audio id="audio" crossorigin="anonymous" preload="auto"></audio>
 
     <script>
         const API = "https://jiosaavn-api.bhargavtodimela4.workers.dev/api";
@@ -271,6 +291,15 @@
         let sIdx = 0;
         let searchTimer;
 
+        // --- Connection Check ---
+        function checkNet() {
+            const online = navigator.onLine;
+            document.getElementById('netStatus').innerHTML = `<div class="dot ${online ? 'online' : 'offline'}"></div> ${online ? 'Online' : 'Offline'}`;
+            document.getElementById('offlineBanner').classList.toggle('show', !online);
+        }
+        window.addEventListener('online', checkNet);
+        window.addEventListener('offline', checkNet);
+
         // --- AS-YOU-TYPE Search ---
         const searchInp = document.getElementById('searchInp');
         searchInp.oninput = () => {
@@ -279,7 +308,7 @@
             searchTimer = setTimeout(() => search(searchInp.value), 400);
         };
 
-        // --- Core Engine ---
+        // --- Core Fetcher ---
         async function fetchAura(url) {
             document.getElementById('loader').classList.add('active');
             try {
@@ -325,12 +354,12 @@
             document.head.appendChild(l);
         }
 
-        // --- Player ---
+        // --- Player Core ---
         function playSong(idx) {
             curIdx = idx;
             const s = queue[curIdx];
             audio.src = s.url;
-            audio.play();
+            audio.play().catch(() => showToast("Stream Throttled. Retrying..."));
             document.getElementById('miniPlayer').classList.add('active');
             updateUI(s);
             updateMediaSession(s);
@@ -376,6 +405,7 @@
             sIdx = (sIdx + 1) % speeds.length;
             audio.playbackRate = speeds[sIdx];
             document.getElementById('speedBtn').innerText = speeds[sIdx] + 'x';
+            showToast("Speed: " + speeds[sIdx] + "x");
         }
 
         function toggleLoop() {
@@ -385,7 +415,7 @@
 
         async function downloadManual(idx) {
             const s = queue[idx];
-            showToast("Downloading...");
+            showToast("Downloading " + s.name);
             try {
                 const r = await fetch(s.url);
                 const b = await r.blob();
@@ -400,6 +430,7 @@
         function downloadCurrent() { if(curIdx !== -1) downloadManual(curIdx); }
 
         // --- Utils ---
+        function toggleModal(s) { document.getElementById('modal').style.display = s ? 'flex' : 'none'; }
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             document.getElementById('themeIcon').innerText = document.body.classList.contains('light-mode') ? 'light_mode' : 'dark_mode';
@@ -422,7 +453,7 @@
             }
         }
 
-        window.onload = () => search("Trending Hindi Mix");
+        window.onload = () => { checkNet(); search("Trending Hindi Mix"); };
     </script>
 </body>
 </html>

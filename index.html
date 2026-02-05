@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura Infinity Gold — Material 3</title>
+    <title>Aura Infinity Platinum — Material 3</title>
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <style>
@@ -21,6 +21,8 @@
             --surface-variant: #49454F;
             --surface-container: #1D1B20;
             --outline: #938F99;
+            --error: #F2B8B5;
+            --on-error: #601410;
             --progress: 0%;
         }
 
@@ -45,7 +47,16 @@
             transition: background 0.3s ease;
         }
 
-        /* Loading Bar */
+        /* Connection Status Banner */
+        #offlineBanner {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: #B00020; color: white; padding: 10px;
+            text-align: center; font-size: 12px; font-weight: 700;
+            z-index: 10001; transform: translateY(-100%); transition: 0.4s;
+        }
+        #offlineBanner.show { transform: translateY(0); }
+
+        /* Loader */
         #loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 3px;
             background: transparent; z-index: 9999; overflow: hidden; display: none;
@@ -54,9 +65,19 @@
         .loader-fill { width: 40%; height: 100%; background: var(--primary); position: absolute; left: -40%; animation: flow 1.2s infinite linear; }
         @keyframes flow { from { left: -40%; } to { left: 100%; } }
 
-        /* Main Layout */
-        header { padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; }
-        .brand { font-size: 22px; font-weight: 700; color: var(--primary); letter-spacing: -1px; }
+        /* Header */
+        header { padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 10; }
+        .brand { font-size: 20px; font-weight: 700; color: var(--primary); letter-spacing: -1px; }
+        
+        .status-badge {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--surface-container); padding: 6px 12px;
+            border-radius: 20px; font-size: 11px; font-weight: 700;
+            text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .dot.online { background: #4CAF50; box-shadow: 0 0 8px #4CAF50; }
+        .dot.offline { background: #F44336; box-shadow: 0 0 8px #F44336; }
 
         main { height: calc(100vh - 140px); overflow-y: auto; padding: 0 16px 150px; scrollbar-width: none; }
         main::-webkit-scrollbar { display: none; }
@@ -76,9 +97,8 @@
         .card .t { font-weight: 500; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .card .a { font-size: 12px; opacity: 0.6; }
 
-        /* Footer */
         footer { text-align: center; padding: 40px 0 20px; font-size: 11px; opacity: 0.5; line-height: 2; }
-        .disclaimer-link { text-decoration: underline; cursor: pointer; color: var(--primary); font-weight: 700; }
+        .disclaimer-btn { color: var(--primary); font-weight: 700; text-decoration: underline; cursor: pointer; }
 
         /* Players */
         #miniPlayer {
@@ -91,7 +111,7 @@
         #miniPlayer.active { transform: translateY(0); }
         .m-art { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; }
         .m-info { flex: 1; overflow: hidden; }
-        .m-info h4 { margin: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .m-info h4 { margin: 0; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
         #fullPlayer {
             position: fixed; inset: 0; background: var(--surface); z-index: 2000;
@@ -105,47 +125,44 @@
         .f-meta p { margin: 4px 0 0; font-size: 18px; color: var(--primary); }
 
         .seeker-box { margin: 24px 0; }
-        .slider {
-            -webkit-appearance: none; width: 100%; height: 4px; border-radius: 2px;
-            background: linear-gradient(to right, var(--primary) var(--progress), var(--surface-variant) var(--progress));
-            outline: none; cursor: pointer;
-        }
+        .slider { -webkit-appearance: none; width: 100%; height: 4px; border-radius: 2px; background: linear-gradient(to right, var(--primary) var(--progress), var(--surface-variant) var(--progress)); outline: none; cursor: pointer; }
         .slider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: var(--primary); border-radius: 50%; }
 
         .f-ctrls { display: flex; justify-content: space-between; align-items: center; }
         .play-btn { width: 72px; height: 72px; border-radius: 50%; background: var(--primary-container); color: var(--on-primary-container); display: flex; align-items: center; justify-content: center; }
         .icon-btn { background: none; border: none; color: var(--on-surface); cursor: pointer; padding: 10px; border-radius: 50%; display: flex; }
 
-        /* Extra Controls */
         .extra-ctrls { display: flex; align-items: center; justify-content: space-around; margin: 30px 0; background: var(--surface-container); padding: 15px; border-radius: 20px; }
         .vol-slider { width: 80px; accent-color: var(--primary); cursor: pointer; }
-        .speed-btn { font-family: 'Roboto Mono'; font-weight: 700; font-size: 12px; color: var(--primary); }
 
-        /* Disclaimer Modal */
-        #modalOverlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px); z-index: 3000;
-            display: none; align-items: center; justify-content: center; padding: 20px;
+        /* Modal Disclaimer */
+        #disclaimerModal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+            z-index: 11000; display: none; align-items: center; justify-content: center; padding: 25px;
         }
-        .modal-box {
-            background: var(--surface-container); padding: 30px; border-radius: 28px;
-            max-width: 400px; width: 100%; border: 1px solid var(--outline);
-            text-align: center; animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        .modal-card {
+            background: var(--surface-container); padding: 32px; border-radius: 28px;
+            max-width: 420px; width: 100%; text-align: center; border: 1px solid var(--outline);
+            animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        @keyframes modalIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .modal-box h3 { margin: 0 0 15px; color: var(--primary); }
-        .modal-box p { font-size: 14px; line-height: 1.6; opacity: 0.8; margin-bottom: 25px; }
-        .modal-close { background: var(--primary); color: var(--on-primary); border: none; padding: 12px 30px; border-radius: 20px; font-weight: 700; cursor: pointer; }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } }
+        .modal-card h3 { color: var(--primary); margin: 0 0 16px; font-size: 22px; }
+        .modal-card p { font-size: 14px; line-height: 1.6; opacity: 0.8; margin-bottom: 24px; }
+        .btn-filled { background: var(--primary); color: var(--on-primary); border: none; padding: 12px 32px; border-radius: 20px; font-weight: 700; cursor: pointer; }
 
         #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--on-surface); color: var(--surface); padding: 12px 24px; border-radius: 30px; font-size: 14px; opacity: 0; transition: 0.3s; z-index: 9999; }
     </style>
 </head>
 <body>
 
+    <div id="offlineBanner">YOU ARE OFFLINE. PLAYBACK FEATURES ARE LIMITED.</div>
     <div id="loader"><div class="loader-fill"></div></div>
 
     <header>
         <div class="brand">AURA</div>
+        <div class="status-badge" id="netStatus">
+            <div class="dot online"></div> ONLINE
+        </div>
         <button class="icon-btn" onclick="toggleTheme()"><span class="material-symbols-rounded" id="themeIcon">dark_mode</span></button>
     </header>
 
@@ -153,37 +170,37 @@
         <div class="search-area">
             <div class="search-bar">
                 <span class="material-symbols-rounded">search</span>
-                <input type="text" id="searchInp" placeholder="Search song or artist..." autocomplete="off">
+                <input type="text" id="searchInp" placeholder="Search music or artists..." autocomplete="off">
             </div>
             <div class="chips">
                 <div class="chip active" onclick="search('Trending Hindi', this)">Trending</div>
-                <div class="chip" onclick="search('Lofi Beats', this)">Lo-Fi</div>
-                <div class="chip" onclick="search('Top English Songs', this)">Global</div>
-                <div class="chip" onclick="search('New Releases', this)">Latest</div>
+                <div class="chip" onclick="search('Top English hits', this)">Global</div>
+                <div class="chip" onclick="search('Study Lofi Mix', this)">Lo-Fi</div>
+                <div class="chip" onclick="search('90s Bollywood gold', this)">90s Classics</div>
             </div>
         </div>
         <div class="grid" id="mainGrid"></div>
         
         <footer>
             MADE BY BHARGAV TODIMELA<br>
-            <span class="disclaimer-link" onclick="toggleModal(true)">Disclaimer</span>
+            <span class="disclaimer-btn" onclick="toggleModal(true)">Disclaimer</span>
         </footer>
     </main>
 
     <!-- Disclaimer Modal -->
-    <div id="modalOverlay" onclick="toggleModal(false)">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <span class="material-symbols-rounded" style="font-size: 48px; color: var(--primary); margin-bottom: 10px;">info</span>
+    <div id="disclaimerModal" onclick="toggleModal(false)">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <span class="material-symbols-rounded" style="font-size: 48px; color: var(--primary); margin-bottom: 12px;">info</span>
             <h3>Disclaimer</h3>
-            <p>Since we use an unofficial JioSaavn API, it is common to see errors in playback, occasional throttling, or slow loading by the servers. We are always trying to make our services useful to you. Thank you for using Aura.</p>
-            <button class="modal-close" onclick="toggleModal(false)">GOT IT</button>
+            <p>Since we use an unofficial JioSaavn API, it is common to see errors in playback and throttling by the servers. We are always trying make our services useful to you. Thank you for using Aura.</p>
+            <button class="btn-filled" onclick="toggleModal(false)">GOT IT</button>
         </div>
     </div>
 
     <!-- Mini Player -->
     <div id="miniPlayer" onclick="expandPlayer(true)">
         <img src="" id="mArt" class="m-art">
-        <div class="m-info"><h4 id="mTitle">Not Playing</h4><span id="mArtist" style="font-size:12px;opacity:0.7">Select a track</span></div>
+        <div class="m-info"><h4 id="mTitle">Not Playing</h4><span id="mArtist" style="font-size:12px;opacity:0.7">Aura Platinum</span></div>
         <button class="icon-btn" onclick="event.stopPropagation(); togglePlay()"><span class="material-symbols-rounded" id="mPlayIcon" style="font-size:35px">play_arrow</span></button>
     </div>
 
@@ -191,7 +208,7 @@
     <div id="fullPlayer">
         <div class="f-nav">
             <button class="icon-btn" onclick="expandPlayer(false)"><span class="material-symbols-rounded">expand_more</span></button>
-            <span style="font-size:12px; font-weight:700">AURA PLAYER</span>
+            <span style="font-size:12px; font-weight:700">AURA INFINITY</span>
             <button class="icon-btn" onclick="downloadCurrent()"><span class="material-symbols-rounded">download</span></button>
         </div>
 
@@ -220,8 +237,8 @@
                 <span class="material-symbols-rounded" style="font-size:18px">volume_up</span>
                 <input type="range" class="vol-slider" id="volCtrl" min="0" max="1" step="0.1" value="1">
             </div>
-            <button class="icon-btn speed-btn" onclick="cycleSpeed()" id="speedBtn">1x</button>
-            <button class="icon-btn" onclick="showToast('Up Next: Coming soon!')">
+            <button class="icon-btn" onclick="cycleSpeed()" id="speedBtn" style="font-family:'Roboto Mono'; font-weight:700; font-size:12px; color:var(--primary)">1x</button>
+            <button class="icon-btn" onclick="showToast('Up Next: Feature coming soon!')">
                 <span class="material-symbols-rounded">queue_music</span>
             </button>
         </div>
@@ -239,8 +256,21 @@
         let speeds = [1, 1.25, 1.5, 2, 0.5];
         let sIdx = 0;
 
-        // --- Core ---
+        // --- Connection Status ---
+        function updateNetStatus() {
+            const isOnline = navigator.onLine;
+            const badge = document.getElementById('netStatus');
+            const banner = document.getElementById('offlineBanner');
+            badge.innerHTML = `<div class="dot ${isOnline ? 'online' : 'offline'}"></div> ${isOnline ? 'Online' : 'Offline'}`;
+            if (!isOnline) banner.classList.add('show');
+            else banner.classList.remove('show');
+        }
+        window.addEventListener('online', updateNetStatus);
+        window.addEventListener('offline', updateNetStatus);
+
+        // --- Core Fetching ---
         async function fetchAPI(url) {
+            if(!navigator.onLine) { showToast("You are offline!"); return null; }
             document.getElementById('loader').classList.add('active');
             try {
                 const r = await fetch(API + url);
@@ -283,7 +313,7 @@
             curIdx = idx;
             const s = queue[curIdx];
             audio.src = s.url;
-            audio.play().catch(() => showToast("Playback Error: API Throttled"));
+            audio.play().catch(() => showToast("API Throttled. Try again."));
             document.getElementById('miniPlayer').classList.add('active');
             updateUI(s);
         }
@@ -323,7 +353,7 @@
         document.getElementById('seeker').oninput = (e) => audio.currentTime = (e.target.value / 100) * audio.duration;
         audio.onended = () => isLoop ? audio.play() : next();
 
-        // --- Features ---
+        // --- Controls ---
         document.getElementById('volCtrl').oninput = (e) => audio.volume = e.target.value;
 
         function cycleSpeed() {
@@ -340,10 +370,9 @@
         async function downloadCurrent() {
             if(curIdx === -1) return;
             const song = queue[curIdx];
-            showToast("Downloading... Check notifications");
+            showToast("Downloading... Check File Manager");
 
             try {
-                // Mobile-friendly blob download
                 const response = await fetch(song.url);
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
@@ -356,16 +385,11 @@
                 window.URL.revokeObjectURL(url);
                 document.body.removeChild(a);
             } catch (e) {
-                // Fallback for strict browsers
                 window.open(song.url, '_blank');
             }
         }
 
-        function toggleModal(show) {
-            document.getElementById('modalOverlay').style.display = show ? 'flex' : 'none';
-        }
-
-        // --- Utils ---
+        function toggleModal(show) { document.getElementById('disclaimerModal').style.display = show ? 'flex' : 'none'; }
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             document.getElementById('themeIcon').innerText = document.body.classList.contains('light-mode') ? 'light_mode' : 'dark_mode';
@@ -375,7 +399,10 @@
         function clean(h) { const t = document.createElement("textarea"); t.innerHTML = h; return t.value; }
         function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.style.opacity = 1; setTimeout(() => t.style.opacity = 0, 2500); }
 
-        window.onload = () => search("Trending Hindi");
+        window.onload = () => {
+            updateNetStatus();
+            search("Trending Hindi");
+        };
     </script>
 </body>
 </html>

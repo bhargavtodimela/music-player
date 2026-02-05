@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura Infinity Platinum — Material 3</title>
+    <title>Aura Emerald — Material 3 Final</title>
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <style>
@@ -18,11 +18,9 @@
             --on-primary-container: #EADDFF;
             --surface: #0F0D13;
             --on-surface: #E6E1E5;
-            --surface-variant: #49454F;
+            --surface-variant: #25232A;
             --surface-container: #1D1B20;
             --outline: #938F99;
-            --error: #F2B8B5;
-            --on-error: #601410;
             --progress: 0%;
         }
 
@@ -44,19 +42,18 @@
             color: var(--on-surface);
             margin: 0; padding: 0;
             height: 100vh; overflow: hidden;
-            transition: background 0.3s ease;
+            transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Connection Status Banner */
+        /* Status & Loaders */
         #offlineBanner {
             position: fixed; top: 0; left: 0; width: 100%;
-            background: #B00020; color: white; padding: 10px;
-            text-align: center; font-size: 12px; font-weight: 700;
-            z-index: 10001; transform: translateY(-100%); transition: 0.4s;
+            background: #B00020; color: white; padding: 8px;
+            text-align: center; font-size: 11px; font-weight: 700;
+            z-index: 10001; transform: translateY(-100%); transition: 0.3s;
         }
         #offlineBanner.show { transform: translateY(0); }
 
-        /* Loader */
         #loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 3px;
             background: transparent; z-index: 9999; overflow: hidden; display: none;
@@ -65,104 +62,96 @@
         .loader-fill { width: 40%; height: 100%; background: var(--primary); position: absolute; left: -40%; animation: flow 1.2s infinite linear; }
         @keyframes flow { from { left: -40%; } to { left: 100%; } }
 
-        /* Header */
+        /* App Bar */
         header { padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 10; }
-        .brand { font-size: 20px; font-weight: 700; color: var(--primary); letter-spacing: -1px; }
-        
-        .status-badge {
-            display: flex; align-items: center; gap: 8px;
-            background: var(--surface-container); padding: 6px 12px;
-            border-radius: 20px; font-size: 11px; font-weight: 700;
-            text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1);
-        }
+        .brand { font-size: 20px; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
+        .status-badge { display: flex; align-items: center; gap: 8px; background: var(--surface-container); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; border: 1px solid rgba(255,255,255,0.05); }
         .dot { width: 8px; height: 8px; border-radius: 50%; }
-        .dot.online { background: #4CAF50; box-shadow: 0 0 8px #4CAF50; }
-        .dot.offline { background: #F44336; box-shadow: 0 0 8px #F44336; }
+        .dot.online { background: #4CAF50; box-shadow: 0 0 10px #4CAF50; }
+        .dot.offline { background: #F44336; }
 
+        /* Content */
         main { height: calc(100vh - 140px); overflow-y: auto; padding: 0 16px 150px; scrollbar-width: none; }
         main::-webkit-scrollbar { display: none; }
 
-        .search-area { position: sticky; top: 0; background: var(--surface); padding: 8px 0; z-index: 20; }
-        .search-bar { background: var(--surface-container); border-radius: 28px; height: 52px; display: flex; align-items: center; padding: 0 18px; transition: 0.2s; border: 1px solid transparent; }
-        .search-bar:focus-within { border-color: var(--primary); }
+        .search-area { position: sticky; top: 0; background: var(--surface); padding: 10px 0; z-index: 20; }
+        .search-bar { background: var(--surface-container); border-radius: 28px; height: 56px; display: flex; align-items: center; padding: 0 20px; border: 1px solid transparent; transition: 0.2s; }
+        .search-bar:focus-within { border-color: var(--primary); background: var(--surface-variant); }
         .search-bar input { flex: 1; background: none; border: none; color: var(--on-surface); font-size: 16px; margin-left: 10px; }
 
-        .chips { display: flex; gap: 8px; overflow-x: auto; margin-top: 12px; scrollbar-width: none; }
-        .chip { background: var(--surface-container); padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 500; white-space: nowrap; cursor: pointer; }
+        .chips { display: flex; gap: 8px; overflow-x: auto; margin-top: 12px; scrollbar-width: none; padding-bottom: 4px; }
+        .chip { background: var(--surface-container); padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 500; white-space: nowrap; cursor: pointer; transition: 0.2s; }
         .chip.active { background: var(--primary); color: var(--on-primary); }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 12px; margin-top: 16px; }
-        .card { background: var(--surface-container); padding: 10px; border-radius: 20px; cursor: pointer; transition: 0.2s; }
-        .card img { width: 100%; aspect-ratio: 1; border-radius: 14px; object-fit: cover; margin-bottom: 8px; }
+        /* Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; margin-top: 20px; }
+        .card { background: var(--surface-container); padding: 12px; border-radius: 24px; cursor: pointer; transition: 0.3s; position: relative; }
+        .card:hover { transform: translateY(-4px); background: var(--surface-variant); }
+        .card img { width: 100%; aspect-ratio: 1; border-radius: 16px; object-fit: cover; margin-bottom: 8px; }
         .card .t { font-weight: 500; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .card .a { font-size: 12px; opacity: 0.6; }
+        
+        .card-dl { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.6); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); transition: 0.2s; }
+        .card-dl:hover { background: var(--primary); color: var(--on-primary); }
 
-        footer { text-align: center; padding: 40px 0 20px; font-size: 11px; opacity: 0.5; line-height: 2; }
+        footer { text-align: center; padding: 40px 0 20px; font-size: 11px; opacity: 0.5; line-height: 2; border-top: 1px solid rgba(255,255,255,0.05); }
         .disclaimer-btn { color: var(--primary); font-weight: 700; text-decoration: underline; cursor: pointer; }
 
-        /* Players */
+        /* Mini Player */
         #miniPlayer {
             position: fixed; bottom: 12px; left: 12px; right: 12px;
             background: var(--primary-container); color: var(--on-primary-container);
-            height: 64px; border-radius: 16px; display: flex; align-items: center;
-            padding: 0 12px; gap: 12px; transform: translateY(200%); transition: 0.4s;
-            z-index: 1000; cursor: pointer; box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            height: 68px; border-radius: 20px; display: flex; align-items: center;
+            padding: 0 14px; gap: 14px; transform: translateY(200%); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000; cursor: pointer; box-shadow: 0 12px 40px rgba(0,0,0,0.6);
         }
         #miniPlayer.active { transform: translateY(0); }
-        .m-art { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; }
+        .m-art { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .m-info { flex: 1; overflow: hidden; }
         .m-info h4 { margin: 0; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+        /* Full Player Refined */
         #fullPlayer {
             position: fixed; inset: 0; background: var(--surface); z-index: 2000;
-            display: none; flex-direction: column; padding: 20px; overflow-y: auto;
+            display: none; flex-direction: column; padding: 24px; overflow-y: auto;
         }
-        .f-nav { display: flex; justify-content: space-between; align-items: center; }
-        .f-art-wrap { display: flex; justify-content: center; padding: 30px 0; }
-        .f-img { width: 80vw; max-width: 300px; aspect-ratio: 1; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+        .f-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .f-art-wrap { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px 0; }
+        .f-img { width: 85vw; max-width: 320px; aspect-ratio: 1; border-radius: 28px; box-shadow: 0 30px 60px rgba(0,0,0,0.7); transition: 0.3s; }
 
-        .f-meta h2 { margin: 0; font-size: 24px; }
-        .f-meta p { margin: 4px 0 0; font-size: 18px; color: var(--primary); }
+        .f-meta { margin-top: 20px; }
+        .f-meta h2 { margin: 0; font-size: 26px; font-weight: 700; }
+        .f-meta p { margin: 6px 0 0; font-size: 18px; color: var(--primary); opacity: 0.9; }
 
-        .seeker-box { margin: 24px 0; }
-        .slider { -webkit-appearance: none; width: 100%; height: 4px; border-radius: 2px; background: linear-gradient(to right, var(--primary) var(--progress), var(--surface-variant) var(--progress)); outline: none; cursor: pointer; }
-        .slider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: var(--primary); border-radius: 50%; }
+        .seeker-box { margin: 30px 0 10px; }
+        .slider { -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px; background: linear-gradient(to right, var(--primary) var(--progress), var(--surface-variant) var(--progress)); outline: none; cursor: pointer; }
+        .slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
 
-        .f-ctrls { display: flex; justify-content: space-between; align-items: center; }
-        .play-btn { width: 72px; height: 72px; border-radius: 50%; background: var(--primary-container); color: var(--on-primary-container); display: flex; align-items: center; justify-content: center; }
-        .icon-btn { background: none; border: none; color: var(--on-surface); cursor: pointer; padding: 10px; border-radius: 50%; display: flex; }
+        .f-ctrls { display: flex; justify-content: space-between; align-items: center; margin: 20px 0; }
+        .play-btn { width: 76px; height: 76px; border-radius: 50%; background: var(--primary-container); color: var(--on-primary-container); display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .play-btn:active { transform: scale(0.9); }
+        .icon-btn { background: none; border: none; color: var(--on-surface); cursor: pointer; padding: 12px; border-radius: 50%; display: flex; transition: 0.2s; }
+        .icon-btn:active { background: var(--surface-variant); }
 
-        .extra-ctrls { display: flex; align-items: center; justify-content: space-around; margin: 30px 0; background: var(--surface-container); padding: 15px; border-radius: 20px; }
-        .vol-slider { width: 80px; accent-color: var(--primary); cursor: pointer; }
+        .extra-panel { display: flex; align-items: center; justify-content: space-between; background: var(--surface-container); padding: 16px 24px; border-radius: 24px; margin-top: 20px; }
+        .vol-slider { width: 100px; accent-color: var(--primary); cursor: pointer; }
 
-        /* Modal Disclaimer */
-        #disclaimerModal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
-            z-index: 11000; display: none; align-items: center; justify-content: center; padding: 25px;
-        }
-        .modal-card {
-            background: var(--surface-container); padding: 32px; border-radius: 28px;
-            max-width: 420px; width: 100%; text-align: center; border: 1px solid var(--outline);
-            animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } }
-        .modal-card h3 { color: var(--primary); margin: 0 0 16px; font-size: 22px; }
-        .modal-card p { font-size: 14px; line-height: 1.6; opacity: 0.8; margin-bottom: 24px; }
-        .btn-filled { background: var(--primary); color: var(--on-primary); border: none; padding: 12px 32px; border-radius: 20px; font-weight: 700; cursor: pointer; }
+        /* Modal */
+        #disclaimerModal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); z-index: 11000; display: none; align-items: center; justify-content: center; padding: 25px; }
+        .modal-card { background: var(--surface-container); padding: 32px; border-radius: 32px; max-width: 420px; width: 100%; text-align: center; border: 1px solid var(--outline); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .btn-filled { background: var(--primary); color: var(--on-primary); border: none; padding: 14px 40px; border-radius: 24px; font-weight: 700; cursor: pointer; margin-top: 20px; }
 
-        #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--on-surface); color: var(--surface); padding: 12px 24px; border-radius: 30px; font-size: 14px; opacity: 0; transition: 0.3s; z-index: 9999; }
+        #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--on-surface); color: var(--surface); padding: 12px 28px; border-radius: 40px; font-size: 14px; font-weight: 500; opacity: 0; transition: 0.3s; z-index: 9999; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
 
-    <div id="offlineBanner">YOU ARE OFFLINE. PLAYBACK FEATURES ARE LIMITED.</div>
+    <div id="offlineBanner">NO INTERNET CONNECTION. OFFLINE MODE ACTIVE.</div>
     <div id="loader"><div class="loader-fill"></div></div>
 
     <header>
         <div class="brand">AURA</div>
-        <div class="status-badge" id="netStatus">
-            <div class="dot online"></div> ONLINE
-        </div>
+        <div class="status-badge" id="netStatus"><div class="dot online"></div> ONLINE</div>
         <button class="icon-btn" onclick="toggleTheme()"><span class="material-symbols-rounded" id="themeIcon">dark_mode</span></button>
     </header>
 
@@ -170,77 +159,82 @@
         <div class="search-area">
             <div class="search-bar">
                 <span class="material-symbols-rounded">search</span>
-                <input type="text" id="searchInp" placeholder="Search music or artists..." autocomplete="off">
+                <input type="text" id="searchInp" placeholder="Artists, songs, albums..." autocomplete="off">
             </div>
             <div class="chips">
-                <div class="chip active" onclick="search('Trending Hindi', this)">Trending</div>
-                <div class="chip" onclick="search('Top English hits', this)">Global</div>
-                <div class="chip" onclick="search('Study Lofi Mix', this)">Lo-Fi</div>
-                <div class="chip" onclick="search('90s Bollywood gold', this)">90s Classics</div>
+                <div class="chip active" onclick="search('Trending Hindi Mix', this)">Trending</div>
+                <div class="chip" onclick="search('English Pop hits', this)">Global Pop</div>
+                <div class="chip" onclick="search('Deep Study Lofi', this)">Deep Lo-Fi</div>
+                <div class="chip" onclick="search('Bollywood Party 2024', this)">Party</div>
+                <div> class="chip" onclick="search('Telugu', this)">telugu songs</div>
             </div>
         </div>
         <div class="grid" id="mainGrid"></div>
         
         <footer>
             MADE BY BHARGAV TODIMELA<br>
-            <span class="disclaimer-btn" onclick="toggleModal(true)">Disclaimer</span>
+            <span class="disclaimer-btn" onclick="toggleModal(true)">View Disclaimer</span>
         </footer>
     </main>
-
-    <!-- Disclaimer Modal -->
-    <div id="disclaimerModal" onclick="toggleModal(false)">
-        <div class="modal-card" onclick="event.stopPropagation()">
-            <span class="material-symbols-rounded" style="font-size: 48px; color: var(--primary); margin-bottom: 12px;">info</span>
-            <h3>Disclaimer</h3>
-            <p>Since we use an unofficial JioSaavn API, it is common to see errors in playback and throttling by the servers. We are always trying make our services useful to you. Thank you for using Aura.</p>
-            <button class="btn-filled" onclick="toggleModal(false)">GOT IT</button>
-        </div>
-    </div>
 
     <!-- Mini Player -->
     <div id="miniPlayer" onclick="expandPlayer(true)">
         <img src="" id="mArt" class="m-art">
-        <div class="m-info"><h4 id="mTitle">Not Playing</h4><span id="mArtist" style="font-size:12px;opacity:0.7">Aura Platinum</span></div>
-        <button class="icon-btn" onclick="event.stopPropagation(); togglePlay()"><span class="material-symbols-rounded" id="mPlayIcon" style="font-size:35px">play_arrow</span></button>
+        <div class="m-info"><h4 id="mTitle">Not Playing</h4><span id="mArtist" style="font-size:12px;opacity:0.7">Emerald Version</span></div>
+        <button class="icon-btn" onclick="event.stopPropagation(); togglePlay()"><span class="material-symbols-rounded" id="mPlayIcon" style="font-size:38px">play_arrow</span></button>
     </div>
 
     <!-- Full Player -->
     <div id="fullPlayer">
         <div class="f-nav">
-            <button class="icon-btn" onclick="expandPlayer(false)"><span class="material-symbols-rounded">expand_more</span></button>
-            <span style="font-size:12px; font-weight:700">AURA INFINITY</span>
+            <button class="icon-btn" onclick="expandPlayer(false)"><span class="material-symbols-rounded" style="font-size:32px">expand_more</span></button>
+            <span style="font-size:12px; font-weight:700; opacity:0.6; letter-spacing:1px">NOW PLAYING</span>
             <button class="icon-btn" onclick="downloadCurrent()"><span class="material-symbols-rounded">download</span></button>
         </div>
 
         <div class="f-art-wrap"><img src="" id="fArt" class="f-img"></div>
-        <div class="f-meta"><h2 id="fTitle">Song Title</h2><p id="fArtist">Artist Name</p></div>
+        
+        <div class="f-meta">
+            <h2 id="fTitle">Song Title</h2>
+            <p id="fArtist">Artist Name</p>
+        </div>
 
         <div class="seeker-box">
             <input type="range" class="slider" id="seeker" value="0">
-            <div style="display:flex; justify-content: space-between; margin-top:10px; font-family:'Roboto Mono'; font-size:11px; opacity:0.6">
+            <div style="display:flex; justify-content: space-between; margin-top:10px; font-family:'Roboto Mono'; font-size:12px; font-weight:700; opacity:0.5">
                 <span id="curT">0:00</span><span id="totT">0:00</span>
             </div>
         </div>
 
         <div class="f-ctrls">
             <button class="icon-btn" onclick="toggleShuffle()"><span class="material-symbols-rounded" id="shuff">shuffle</span></button>
-            <div class="main-btns">
-                <button class="icon-btn" onclick="prev()"><span class="material-symbols-rounded" style="font-size:35px">skip_previous</span></button>
-                <div class="play-btn" onclick="togglePlay()"><span class="material-symbols-rounded" style="font-size:45px" id="fPlayIcon">play_arrow</span></div>
-                <button class="icon-btn" onclick="next()"><span class="material-symbols-rounded" style="font-size:35px">skip_next</span></button>
+            <div class="main-btns" style="display:flex; align-items:center; gap:15px">
+                <button class="icon-btn" onclick="prev()"><span class="material-symbols-rounded" style="font-size:42px">skip_previous</span></button>
+                <div class="play-btn" onclick="togglePlay()"><span class="material-symbols-rounded" style="font-size:52px" id="fPlayIcon">play_arrow</span></div>
+                <button class="icon-btn" onclick="next()"><span class="material-symbols-rounded" style="font-size:42px">skip_next</span></button>
             </div>
             <button class="icon-btn" onclick="toggleLoop()"><span class="material-symbols-rounded" id="loop">repeat</span></button>
         </div>
 
-        <div class="extra-ctrls">
-            <div style="display:flex; align-items:center; gap:8px">
-                <span class="material-symbols-rounded" style="font-size:18px">volume_up</span>
-                <input type="range" class="vol-slider" id="volCtrl" min="0" max="1" step="0.1" value="1">
+        <div class="extra-panel">
+            <div style="display:flex; align-items:center; gap:10px">
+                <span class="material-symbols-rounded" style="font-size:20px; opacity:0.7">volume_up</span>
+                <input type="range" class="vol-slider" id="volCtrl" min="0" max="1" step="0.05" value="1">
             </div>
-            <button class="icon-btn" onclick="cycleSpeed()" id="speedBtn" style="font-family:'Roboto Mono'; font-weight:700; font-size:12px; color:var(--primary)">1x</button>
-            <button class="icon-btn" onclick="showToast('Up Next: Feature coming soon!')">
-                <span class="material-symbols-rounded">queue_music</span>
+            <button class="icon-btn" onclick="cycleSpeed()" id="speedBtn" style="font-family:'Roboto Mono'; font-weight:700; font-size:14px; color:var(--primary)">1.0x</button>
+            <button class="icon-btn" onclick="showToast('Queue: Coming in Next Update!')">
+                <span class="material-symbols-rounded">playlist_play</span>
             </button>
+        </div>
+    </div>
+
+    <!-- Modal Disclaimer -->
+    <div id="disclaimerModal" onclick="toggleModal(false)">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <span class="material-symbols-rounded" style="font-size: 56px; color: var(--primary); margin-bottom: 16px;">verified_user</span>
+            <h3>Service Disclaimer</h3>
+            <p>Aura utilizes an unofficial JioSaavn API. You may experience occasional throttling, playback pauses, or slow response times due to server load. We appreciate your patience as we work to maintain this community service.</p>
+            <button class="btn-filled" onclick="toggleModal(false)">I UNDERSTAND</button>
         </div>
     </div>
 
@@ -253,43 +247,40 @@
         let queue = [];
         let curIdx = -1;
         let isLoop = false;
-        let speeds = [1, 1.25, 1.5, 2, 0.5];
+        let speeds = [1, 1.25, 1.5, 2, 0.75];
         let sIdx = 0;
 
-        // --- Connection Status ---
-        function updateNetStatus() {
-            const isOnline = navigator.onLine;
-            const badge = document.getElementById('netStatus');
-            const banner = document.getElementById('offlineBanner');
-            badge.innerHTML = `<div class="dot ${isOnline ? 'online' : 'offline'}"></div> ${isOnline ? 'Online' : 'Offline'}`;
-            if (!isOnline) banner.classList.add('show');
-            else banner.classList.remove('show');
+        // --- Connection Check ---
+        function checkNet() {
+            const online = navigator.onLine;
+            document.getElementById('netStatus').innerHTML = `<div class="dot ${online ? 'online' : 'offline'}"></div> ${online ? 'Online' : 'Offline'}`;
+            document.getElementById('offlineBanner').classList.toggle('show', !online);
         }
-        window.addEventListener('online', updateNetStatus);
-        window.addEventListener('offline', updateNetStatus);
+        window.addEventListener('online', checkNet);
+        window.addEventListener('offline', checkNet);
 
-        // --- Core Fetching ---
-        async function fetchAPI(url) {
-            if(!navigator.onLine) { showToast("You are offline!"); return null; }
+        // --- Data Handling ---
+        async function fetchAura(url) {
+            if(!navigator.onLine) { showToast("Offline: Cannot reach servers"); return null; }
             document.getElementById('loader').classList.add('active');
             try {
                 const r = await fetch(API + url);
                 const d = await r.json();
                 return d.data;
-            } catch(e) { return null; }
+            } catch(e) { showToast("Server error. Try again."); return null; }
             finally { document.getElementById('loader').classList.remove('active'); }
         }
 
-        const inp = document.getElementById('searchInp');
-        inp.onchange = () => search(inp.value);
+        const searchInp = document.getElementById('searchInp');
+        searchInp.onchange = () => search(searchInp.value);
 
         async function search(q, el) {
             if(el) {
                 document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
                 el.classList.add('active');
-                inp.value = q;
+                searchInp.value = q;
             }
-            const data = await fetchAPI(`/search/songs?query=${encodeURIComponent(q)}`);
+            const data = await fetchAura(`/search/songs?query=${encodeURIComponent(q)}`);
             if(data) {
                 queue = data.results.map(s => ({
                     id: s.id, name: clean(s.name), artist: clean(s.artists.primary[0].name),
@@ -303,43 +294,47 @@
             document.getElementById('mainGrid').innerHTML = queue.map((s, i) => `
                 <div class="card" onclick="playSong(${i})">
                     <img src="${s.image}" loading="lazy">
+                    <div class="card-dl" onclick="event.stopPropagation(); downloadManual(${i})">
+                        <span class="material-symbols-rounded" style="font-size:20px">download</span>
+                    </div>
                     <div class="t">${s.name}</div>
                     <div class="a">${s.artist}</div>
                 </div>
             `).join('');
         }
 
+        // --- Player Core ---
         function playSong(idx) {
             curIdx = idx;
             const s = queue[curIdx];
             audio.src = s.url;
-            audio.play().catch(() => showToast("API Throttled. Try again."));
+            audio.play().then(() => showToast("Playing: " + s.name)).catch(() => showToast("API Throttled. Try Playback again."));
             document.getElementById('miniPlayer').classList.add('active');
             updateUI(s);
+            updateMediaSession(s);
         }
 
         function updateUI(s) {
             document.getElementById('mArt').src = document.getElementById('fArt').src = s.image;
             document.getElementById('mTitle').innerText = document.getElementById('fTitle').innerText = s.name;
             document.getElementById('mArtist').innerText = document.getElementById('fArtist').innerText = s.artist;
-            syncIcons();
+            syncState();
         }
 
         function togglePlay() {
             if(audio.paused) audio.play(); else audio.pause();
-            syncIcons();
+            syncState();
         }
 
-        function syncIcons() {
+        function syncState() {
             const icon = audio.paused ? 'play_arrow' : 'pause';
-            document.getElementById('mPlayIcon').innerText = icon;
-            document.getElementById('fPlayIcon').innerText = icon;
+            document.getElementById('mPlayIcon').innerText = document.getElementById('fPlayIcon').innerText = icon;
         }
 
-        audio.onplay = syncIcons;
-        audio.onpause = syncIcons;
+        audio.onplay = syncState;
+        audio.onpause = syncState;
 
-        function next() { if(curIdx < queue.length - 1) playSong(curIdx + 1); }
+        function next() { if(curIdx < queue.length - 1) playSong(curIdx + 1); else showToast("End of List"); }
         function prev() { if(curIdx > 0) playSong(curIdx - 1); }
 
         audio.ontimeupdate = () => {
@@ -353,43 +348,44 @@
         document.getElementById('seeker').oninput = (e) => audio.currentTime = (e.target.value / 100) * audio.duration;
         audio.onended = () => isLoop ? audio.play() : next();
 
-        // --- Controls ---
+        // --- Audio Features ---
         document.getElementById('volCtrl').oninput = (e) => audio.volume = e.target.value;
 
         function cycleSpeed() {
             sIdx = (sIdx + 1) % speeds.length;
             audio.playbackRate = speeds[sIdx];
             document.getElementById('speedBtn').innerText = speeds[sIdx] + 'x';
+            showToast("Speed: " + speeds[sIdx] + "x");
         }
 
         function toggleLoop() {
             isLoop = !isLoop;
             document.getElementById('loop').style.color = isLoop ? 'var(--primary)' : 'inherit';
+            showToast(isLoop ? "Repeat Enabled" : "Repeat Disabled");
         }
 
-        async function downloadCurrent() {
-            if(curIdx === -1) return;
-            const song = queue[curIdx];
-            showToast("Downloading... Check File Manager");
-
+        // --- Advanced Downloader ---
+        async function downloadManual(idx) {
+            const s = queue[idx];
+            showToast("Requesting: " + s.name);
             try {
-                const response = await fetch(song.url);
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
+                const r = await fetch(s.url);
+                const b = await r.blob();
+                const u = URL.createObjectURL(b);
                 const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = url;
-                a.download = `${song.name}.mp3`;
+                a.href = u;
+                a.download = `${s.name} - Aura.mp3`;
                 document.body.appendChild(a);
                 a.click();
-                window.URL.revokeObjectURL(url);
+                URL.revokeObjectURL(u);
                 document.body.removeChild(a);
-            } catch (e) {
-                window.open(song.url, '_blank');
-            }
+            } catch (e) { window.open(s.url, '_blank'); }
         }
 
-        function toggleModal(show) { document.getElementById('disclaimerModal').style.display = show ? 'flex' : 'none'; }
+        function downloadCurrent() { if(curIdx !== -1) downloadManual(curIdx); }
+
+        // --- UI Utils ---
+        function toggleModal(s) { document.getElementById('disclaimerModal').style.display = s ? 'flex' : 'none'; }
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             document.getElementById('themeIcon').innerText = document.body.classList.contains('light-mode') ? 'light_mode' : 'dark_mode';
@@ -399,10 +395,20 @@
         function clean(h) { const t = document.createElement("textarea"); t.innerHTML = h; return t.value; }
         function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.style.opacity = 1; setTimeout(() => t.style.opacity = 0, 2500); }
 
-        window.onload = () => {
-            updateNetStatus();
-            search("Trending Hindi");
-        };
+        function updateMediaSession(s) {
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: s.name, artist: s.artist,
+                    artwork: [{ src: s.image, sizes: '512x512', type: 'image/jpeg' }]
+                });
+                navigator.mediaSession.setActionHandler('play', togglePlay);
+                navigator.mediaSession.setActionHandler('pause', togglePlay);
+                navigator.mediaSession.setActionHandler('nexttrack', next);
+                navigator.mediaSession.setActionHandler('previoustrack', prev);
+            }
+        }
+
+        window.onload = () => { checkNet(); search("Trending Hindi Mix"); };
     </script>
 </body>
 </html>
